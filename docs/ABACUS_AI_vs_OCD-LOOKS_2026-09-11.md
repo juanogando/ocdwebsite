@@ -136,7 +136,8 @@ Everything in this section is Juan's own record from tonight. Status words are e
 branch; LIVE means on production; DRAFT means a number in code or a note that Juan has not approved; DECIDED means Juan
 said yes but it is not yet in code or on the pages.
 
-**The five capabilities and where each stands (build order fixed by Juan: 360 EXACT first, KIKO last).**
+**Juan's five capabilities plus gating, the cost ledger and the 3-D viewer, and where each stands (build order fixed by
+Juan: 360 EXACT first, KIKO last).**
 
 | # | Capability | What it is | Status 2026-09-11 eve |
 |---|---|---|---|
