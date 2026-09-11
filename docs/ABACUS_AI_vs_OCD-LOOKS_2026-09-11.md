@@ -3,7 +3,9 @@
 Written 2026-09-11 (Juan: "Research abacus ai and compare to OCD-LOOKS").
 Lane: cloud session, no device bridge. OCD-LOOKS facts below come from files read this session in the Drive bridge
 (`OCD_PRICING_MASTER_2026-09-11.md`, `OCD-LOOKS_360_EXACT_STUDIO_and_OCD_ACADEMY_BUILD_SPEC.md`,
-`OCD-LOOKS_BATCH_DESIGN_VIDEO_PROCESS.md`) and the "OCD LOOKS (PHASE 1-OFFERING)" emails sent 2026-08-31.
+`OCD-LOOKS_BATCH_DESIGN_VIDEO_PROCESS.md`, `PROPOSAL_360_EXACT_PRICING_2026-09-11.md`,
+`COMPARE_CURRENT_vs_PROPOSED_2026-09-11.md`, `SESSION_RECAP_2026-09-11_EVE_360_EXACT_BUILD.md`, all read at their
+21:27 UTC versions) and the "OCD LOOKS (PHASE 1-OFFERING)" emails sent 2026-08-31.
 Abacus facts come from web search on 2026-09-11; abacus.ai's own pages are blocked from this container, so every
 Abacus number is second-hand and is cited. Nothing about `dev\ocd-looks` code was read this session.
 
@@ -20,7 +22,10 @@ that a resourceful designer can reach the same underlying model families (Nano B
 Magnific upscaling) inside Abacus Studio for $10 a month and hand-assemble part of what OCD•LOOKS does in one click. Abacus
 does not offer a fashion try-on engine, a locked cast, a spec-accurate multi-view, an exact 360, a tech pack, or any
 fashion vocabulary. OCD•LOOKS' moat is the pipeline and the fidelity, not the models; the price gap per action is the
-thing to be ready to explain.
+thing to be ready to explain. **And the gap is widening in OCD•LOOKS' favour tonight:** 360 EXACT STUDIO is built on
+the `exact360` branch and deployed to a Vercel preview, four more tabs are specified behind it, per-action prices are
+priced out, and Juan decided at 17:25 to raise ELITE to $99 and LICENSE to $249 (not yet in code). Section 2b has all of
+it. None of that has an Abacus equivalent; Abacus is a price anchor, not a rival.
 
 ---
 
@@ -119,8 +124,94 @@ that re-renders the space); product mesh as scene guide; standalone offerings; K
 ledger (vendor, units, USD per action) does not exist yet and is flagged to build before the new tabs ship.
 
 **Deploy.** Next.js app in `dev\ocd-looks` (package name `ocd-ai-studio`), Vercel project `ocd-looks`, Clerk billing.
-A Vercel "Failed production deployment" notice for ocd-looks arrived 2026-09-01 19:37 UTC (Gmail, unread) — not
-investigated here, noted so it is not lost.
+Production `ocd-looks-d44oe8hg8` (Sep 9) still serves looks.ogandocreativedesign.com; the `exact360` work is
+preview-only. A Vercel "Failed production deployment" notice for ocd-looks arrived 2026-09-01 19:37 UTC (Gmail, unread) —
+not investigated here, noted so it is not lost.
+
+---
+
+## 2b · What OCD•LOOKS is adding RIGHT NOW — built, being built, and being priced (as of 2026-09-11 21:27 UTC)
+
+Everything in this section is Juan's own record from tonight. Status words are exact: BUILT means code exists on a
+branch; LIVE means on production; DRAFT means a number in code or a note that Juan has not approved; DECIDED means Juan
+said yes but it is not yet in code or on the pages.
+
+**The five capabilities and where each stands (build order fixed by Juan: 360 EXACT first, KIKO last).**
+
+| # | Capability | What it is | Status 2026-09-11 eve |
+|---|---|---|---|
+| 1 | **360 EXACT STUDIO** | Seven view boxes (front, 3/4 L, 3/4 R, side L, side R, back, top) → 3-D reconstruction → exact turntable on the RTX 4090 (frame N == frame 0) → restyle to the app look. 5 / 10 / 15 / 20 s, ×1 / ×2, direction, seamless loop, MP4 1080p + ProRes, proof sheet, in-app 3-D spin viewer. | **BUILT** on branch `exact360` (commit e7bc95d plus an uncommitted turntable fix). `npm run build` passes; preview deployed at ocd-looks-dxn2719ay; turntable smoke render verified on EW-001 (12 frames). **Not yet:** `db/exact360.sql` run in Supabase (B-35), worker started, signed-in browser check, Meshy key. Deadline: meeting week of 2026-09-14. |
+| 2 | **Tier gating** | `TAB_ACCESS` map, ghosted locked tabs with lock glyph, server-side check. Full sidebar shipped: Studio · Spec Creator · Campaign · 360 EXACT · 3-D Spin · Models · Video · Enhance · Gallery · Academy · KIKO; unbuilt tabs greyed with SOON. | **BUILT** with 360 EXACT (same branch). |
+| 3 | **OCD ACADEMY** | Tutorial tab mirroring the service tabs; each card is a film plus the strong prompt (copy button) plus numbered steps. Seed: the six Rapid Batch Design films in EN and ES. All plans. | **NEXT** (content exists; about a day). |
+| 4 | **SPEC CREATOR** | Same seven boxes in reverse: drawings in, or one drawing plus "Fill the sides"; user types the dimensions (app never invents a number, arithmetic check flagged); output is the tech pack: labelled spec sheet in house style, per-view PNGs, written spec with dimensions table, BOM, construction notes. May replace the separate OCD·SPECS product. | **SPECIFIED**, third in order. |
+| 5 | **OCD-3D VIEWER + export packs** | Orbit viewer on the product's GLB; export packs: web (HTML + GLB + poster), model (GLB + USDZ at real scale), spin set (36 and 24 frames), proof. Retailer presets (Walmart, Amazon, Shopify) read from their current supplier docs at delivery. | **SPECIFIED**; viewer lives inside the 360 EXACT result panel until the tab ships. |
+| 6 | **CAMPAIGN scene composer** | Environment (upload or stock library: STUDIO interiors in white / pastels / grey / dark with a colour prompt, LIVING interiors, exteriors) plus up to three locked-look cast members on 3-D OpenPose skeletons and the product mesh; drag, pose presets, joint edit, camera presets, zoom that re-renders the space; scene rotation appears once an environment and a model are on stage. "Studio Shot" removed from Studio and moved here. | **SPECIFIED**, after the cost ledger. |
+| 7 | **Vendor cost ledger** | Per-action vendor, units and USD on every credit ledger row (fal, FASHN, Magnific, Higgsfield, Meshy), daily reconciliation against vendor balances, margin report per action and plan. | **NOT BUILT**; ordered before Spec Creator and Campaign ship. |
+| 8 | **KIKO Command Station** | The Claude-driven console that runs the whole chain (Spec Creator → render → 360 EXACT → Campaign → film) on a folder of tech packs. Inside OCD•LOOKS as the RAPID_BATCH_DESIGN tier, and standalone. | **LAST**; nothing built. |
+
+**Per-action prices being set (MONEY, 1 credit = $0.10 in plan, $0.12 on top-up). Formula approved by Juan 17:10:
+included runs are free on top of monthly credits → then list credits from the pool → then top-ups. Row numbers DRAFT.**
+
+| Action | Credits | $ in plan | Status |
+|---|---:|---:|---|
+| 360 EXACT 5 s · 10 s · 15 s · 20 s (first run, builds the 3-D) | 120 · 160 · 200 · 240 | $12 · $16 · $20 · $24 | PROPOSED; code still carries the earlier 90 / 120 / 150 / 180 draft |
+| 360 EXACT re-run from cached 3-D | 60 · 80 · 100 · 120 | $6 · $8 · $10 · $12 | PROPOSED |
+| Fill one box from all sides (Edit) | 4 | $0.40 | PROPOSED, equals today's Edit |
+| 3-D Spin viewer | 0 | included with a run | PROPOSED |
+| Export pack, first (web + GLB/USDZ + spin set + proof) | 40 | $4 | PROPOSED |
+| Extra retailer preset | 20 | $2 | PROPOSED |
+| Spec Creator sheet | 25 | $2.50 | DRAFT placeholder |
+| Campaign scene (environment + 1 model) · extra model · new angle | 27 · 12 · 10 | $2.70 · $1.20 · $1 | DRAFT placeholder |
+
+Vendor cost per 360 EXACT run is about $0.60 to $1.60 first run (Meshy about $0.40 to $0.50, turntable electricity on
+the 4090), so margin at these rows is above 90 %. One full product through the new chain at list is 287 credits, about
+$28.70; with a free run and a free sheet it is 102 credits, about $10.20. Market equivalent bought outside: a spin
+shoot at $35 to $150 plus a 3-D model at $40 to $200 plus a photographer.
+
+**Plan changes being set.**
+
+| Plan | Seat today (LIVE) | Seat DECIDED 17:25 | Free 360 EXACT runs / mo | Free Spec sheets (draft) | Free Campaign scenes (draft) | New tabs |
+|---|---:|---:|---:|---:|---:|---|
+| STUDENT | $14 | $14 | 0 | 0 | 0 | Academy only; Spec, 360, Campaign ghosted → upgrade |
+| STARTER | $19 | $19 | 0 | 0 | 0 | same |
+| PRO | $29 per seat | $29 | 0 | 0 | 0 | same |
+| ELITE | $79 per seat | **$99** | **3** ($48 at list) | **5** | **6** | Spec Creator · 360 EXACT · 3-D Spin + packs · Campaign |
+| LICENSE | $199 per seat | **$249** | **10** ($160 at list) | **15** | **20** | same |
+| RAPID_BATCH_DESIGN (KIKO) | not set | not set | 1 per product | 1 per product | 1 per product | everything |
+
+Juan on the raise, 17:25: "the increase makes sense." Not in `pricing.ts`, `/pricing`, `/welcome#plans` or the Clerk
+plans yet; lands with the approved sheet, all files in one commit. Open: existing subscribers keep $79 / $199 until
+renewal, or move on the next cycle. Yearly stays 10 × monthly: $990 and $2,490. Cancellation rule set tonight: monthly
+ends at month end, yearly at year end, self-serve in Manage account → Billing.
+
+**What a month buys after the change (compare sheet §D):** ELITE, 5 full products with exact 360, 3-D and packs
+(3 on free runs, then one $25 top-up), about $25 each at $99. LICENSE, 14 full products, no top-up, about $18 each at
+$249. Vendor cost fully used: about $19 (ELITE) and $52 (LICENSE).
+
+**New standalone SKUs (each also sold outside the app, all unpriced except the first).**
+
+| Offer | Price | Includes | Status |
+|---|---:|---|---|
+| 360 EXACT STUDIO standalone | **$59 / mo · $590 / yr** | 6 free runs any length, 300-credit pool, viewer, 2 export packs / mo; sits under ELITE on purpose (MazingXR is $99 / mo for ten static models) | PROPOSED |
+| CAMPAIGN scene creator standalone | not set | environment + three locked-look models + product mesh, composed live | listed, unpriced |
+| OCD ACADEMY standalone | not set | the tutorial library | listed, unpriced |
+| KIKO Command Station standalone | not set | the console, attachable to any OCD app or a corporate build | listed, unpriced |
+
+**KIKO and corporate builds, internal draft sheet (never public until Juan sets a number).** Measured Claude cost per
+finished product from the six-film token logs: $227 on Fable 5.1 as run, $110 Sonnet 5, $274 Opus 5; planning cost of
+goods $100 Sonnet / $150 Fable including renders. Corporate: Discovery $3,995 (26 h at $150), Pilot build $24,000
+(160 h), Studio build $60,000 (400 h), KIKO license $1,990 per studio per month or $19,900 per year for 5 seats, plus
+$199 per extra seat, Claude and render usage at cost or cost + 30 %. SaaS placeholders: RAPID_BATCH_DESIGN $799 per seat
+per month including 5 products, +$129 per product ($199 on Fable); KIKO standalone seat $599 per month plus usage.
+Design rates set by Juan 11:45: individual design $130 / h, Rapid Batch Design $150 / h.
+
+**Decisions still open for Juan (from the recap and the proposal).**
+1. Approve or amend each proposed per-action row and the 3 / 10 free-run inclusions (code carries the older draft).
+2. Existing subscribers on the $99 / $249 raise: at renewal or next cycle.
+3. Cast member for EW-001; whether the eyewear film waits for 360 EXACT or ships with a placeholder.
+4. MONEY: buy a Meshy API key so the app can build the 3-D from the boxes (without it, 360 EXACT runs only on an
+   uploaded or cached GLB; EW-001's exists, enough for the demo).
+5. Run `db/exact360.sql` in Supabase and start the worker (Juan's own hands, B-35), then the signed-in preview check.
 
 ---
 
@@ -131,7 +222,8 @@ investigated here, noted so it is not lost.
 | What it is | Horizontal super-assistant; model aggregator + agent + app builder | Vertical directed studio for product and fashion design |
 | Buyer | Any professional, teams, developers | Product designers, fashion brands, corporate internal studios |
 | Entry price | $10 per user per month, 20,000 credits | $19 per month, 200 credits (STUDENT $14) |
-| Team price | $20 per user per month Pro; Enterprise from $5,000 per month | $29 / $79 / $199 per seat, 1–20 seats |
+| Team price | $20 per user per month Pro; Enterprise from $5,000 per month | $29 / $79 / $199 per seat today; ELITE $99 and LICENSE $249 decided, pending code |
+| Standalone SKUs | None; one bundle | 360 EXACT STUDIO $59 / mo proposed; Campaign, Academy, KIKO standalone listed, unpriced |
 | What a credit is | Undisclosed per action; heavy media costs more; lockout near 75 % reported | 1 credit = $0.10; every action has a published credit price |
 | Image engines | GPT Image, Nano Banana 2 / Pro, FLUX.2 Pro, Seedream 4.5, Midjourney, Ideogram, Imagen 4, Recraft, Hunyuan, Wan | fal.ai (Nano Banana Pro edit and others), Gemini 3 Pro Image for OCD·SPECS |
 | Video engines | Sora 2, Veo 3.1, Kling v3 / O3 / Motion Control, Seedance 2.0, Wan 2.5, Hailuo 2, Luma, Grok | FASHN video (720p / 1080p, 5–10 s); 360 EXACT planned on 3-D turntable |
@@ -139,10 +231,10 @@ investigated here, noted so it is not lost.
 | Fashion try-on | None found | Build-the-Look try-on, Model Swap, Product-to-Model, Cast-a-Model (FASHN) |
 | Locked cast / identity lock | Reference-image editing only; consistency is per-prompt | Locked cast on PRO and up; locked look across every generation |
 | Spec fidelity | Prompt-driven; no spec input | Spec drawing is the input; Sketch Render "exact to the spec"; multi-view sheet |
-| 360 / turntable | Image-to-video from one frame (invents the far side) | 360 from the all-views sheet today; 360 EXACT (boxes → 3-D → exact spin) in build |
-| Tech pack / production docs | None | Roadmap: Spec Creator with dimension entry, tech pack, Illustrator-editable output |
-| 3-D / retailer export | Not found | Roadmap: GLB / USDZ and spin sets for retailer viewers |
-| Multi-model campaign scenes | General image gen; no pose rig | Roadmap: CAMPAIGN composer with OpenPose skeletons, three locked-look models |
+| 360 / turntable | Image-to-video from one frame (invents the far side) | 360 from the all-views sheet live today; 360 EXACT (boxes → 3-D → exact spin, 5–20 s, seamless) BUILT on `exact360`, preview deployed, 120–240 cr proposed, 3 / 10 free runs on ELITE / LICENSE |
+| Tech pack / production docs | None | Spec Creator specified: dimension entry, labelled sheet, BOM, written spec; 25 cr draft; 5 / 15 free on ELITE / LICENSE |
+| 3-D / retailer export | Not found | OCD-3D Viewer + export packs specified: GLB / USDZ, 36 and 24-frame spin sets, Walmart / Amazon / Shopify presets; 40 cr first pack, 20 cr per extra preset, proposed |
+| Multi-model campaign scenes | General image gen; no pose rig | CAMPAIGN composer specified: stock environments, three locked-look models on 3-D OpenPose rigs, product mesh, scene rotation; 27 cr per scene draft |
 | Agent / automation | DeepAgent builds apps, browses, researches | KIKO Command Station (Claude-driven batch design) specified, not built |
 | API | Enterprise only ($5,000 per month) | None public; custom corporate builds "inside the corporation's own network" |
 | Content policy | Not published in search results | Fashion-edge SFW per Juan's rules |
@@ -165,6 +257,11 @@ investigated here, noted so it is not lost.
 3. **Credit language.** Both products sell credits. Abacus' reputation for opaque credits and lockouts is a gift: OCD•LOOKS
    publishes every action's credit price and the dollar value of a credit. Say so on the pricing page.
 
+**The compare sheet already says the same thing (§G, written earlier tonight):** Abacus is "a PRICE ANCHOR, not a
+competitor." An ELITE seat at $99 equals five ChatLLM Pro seats and leaves with exact 360s, 3-D models and retailer
+packs. The closer match is the KIKO corporate license ($1,990 per studio per month, 5 seats, internal draft) against
+Abacus Enterprise from $5,000 per month. This document and that sheet agree.
+
 **Not a threat.**
 - No try-on, no locked cast, no spec input, no multi-view consistency, no tech pack, no 3-D export, no fashion vocabulary.
 - No retailer or factory story. Juan's "design and production documentation as one motion" has no Abacus equivalent.
@@ -184,8 +281,9 @@ investigated here, noted so it is not lost.
    still life → on-model → campaign → film, same frame start to finish. Keep it that way.
 2. **Publish credit transparency as a feature.** "1 credit = $0.10, every action priced" is a direct counter to the most
    common Abacus complaint.
-3. **Ship 360 EXACT before the meeting week of 2026-09-14** (Juan's own build order). It is the one capability no
-   aggregator can fake from a single frame, and it is the demo that separates a directed studio from a prompt box.
+3. **Finish 360 EXACT before the meeting week of 2026-09-14.** The code is built and previewed; what is left is Juan's
+   hands: run the SQL, start the worker, check the tab signed in. It is the one capability no aggregator can fake from a
+   single frame, and it is the demo that separates a directed studio from a prompt box.
 4. **Build the vendor cost ledger before the new tabs ship** (spec §11). Abacus' credit-drain incident is the cautionary
    tale for shipping expensive actions without per-action cost capture.
 5. **Have the DIY answer ready.** When asked "why not Abacus for $10," the answer is: same renders every time from the
@@ -199,6 +297,10 @@ investigated here, noted so it is not lost.
   eesel blocked by egress (WebSearch only).
 - Repo `juanogando/ocdwebsite` (this container): untouched Astro blog starter on Cloudflare Workers, one commit
   "source repo import", no OCD-LOOKS code. This document is the only change on branch `claude/abacus-ai-ocd-looks-yfppku`.
-- Saved this turn: this file in the repo `docs/`; a copy in `G:\My Drive\OCD_CLAUDE_BRIDGE\`; a copy in
-  Dropbox `/OCD_CLAUDE_BRIDGE/`. **Not reached from this lane:** job folder on C:, `CLAUDE_C-NOTES_INDEX.md`, the job's
+- Revision 2 (section 2b added, 2026-09-11 late): sources for the "being built and priced" section are the 21:27 UTC
+  copies of the pricing master, `PROPOSAL_360_EXACT_PRICING_2026-09-11.md` §1–8f,
+  `COMPARE_CURRENT_vs_PROPOSED_2026-09-11.md` §A–H and `SESSION_RECAP_2026-09-11_EVE_360_EXACT_BUILD.md`, all in the
+  Drive mirror of `OCD_WORK\_PRICING\` and the EW-001 job folder.
+- Saved: this file in the repo `docs/`; the same file in `G:\My Drive\OCD_CLAUDE_BRIDGE\` (updated in place); the same
+  file in Dropbox `/OCD_CLAUDE_BRIDGE/` (replaced). **Not reached from this lane:** job folder on C:, `CLAUDE_C-NOTES_INDEX.md`, the job's
   `_C-NOTES.md`, Obsidian `_INBOX.md`, the job log app. Pull with `OCD_CLOUD_PULL_V2.bat` or the PowerShell relay.
