@@ -243,6 +243,46 @@ Design rates set by Juan 11:45: individual design $130 / h, Rapid Batch Design $
 
 ---
 
+## 3b · The wider market — Flipsnack and Pacdora (added 2026-09-15)
+
+Juan, 2026-09-15: "Also add Flipsnack and a company like Pacdora." Both read from public pricing pages and reviews
+on 2026-09-15; flipsnack.com and pacdora.com are blocked by this container's egress, so every figure is second-hand.
+Flipsnack's older $30 / $85 ladder that some aggregators still show is superseded; two independent sources agree on
+the ladder below.
+
+**Flipsnack — digital catalogue publisher.** Turns a PDF into an interactive page-flip catalogue and hosts it.
+Free plan (limited) · Starter $35 / mo or $192 / yr · Professional $52 / mo · Business $109 / mo ·
+Business Team $319 / mo · Enterprise custom. AI credits 250 / 500 / 1,000 by tier, in-editor image and copy
+generation, AI Animate (a still becomes a few seconds of motion), AI translation. Shoppable catalogues with SKU
+detection and product tags, a Catalog Generator that builds pages from a product feed, per-page analytics and lead
+capture, custom domain and white label on the upper tiers.
+
+**Pacdora — packaging design and 3-D mockups.** Pick a dieline, set the dimensions and material, drop artwork on,
+see it in 3-D. Free plan · Lite $9 / mo annual · Pro $17 / seat / mo annual · Business $59 / seat / mo annual.
+Roughly 5,000 mockups and 3,000–4,900 dieline templates, AI packaging design and AI background generation, real-time
+3-D, export to DXF / AI / PDF for print and 2K–8K JPG / PNG plus 4K MP4 for presentation. No upload of your own 3-D
+model or material, and no GLB / USDZ export found.
+
+**What this changes.**
+1. **Pacdora is the one real precedent for "design and production documentation as one motion."** Its 3-D is
+   parametric, built from the dieline, so its rotation is genuinely exact — the same claim OCD•LOOKS makes for
+   360 EXACT. The difference is scope: Pacdora only does packaging, only from its own template library, and you
+   cannot bring your own product. ⚠️ The outreach email (2026-08-31) says "There's nothing else on the market
+   doing design and production documentation as one motion." That line needs qualifying before the next send —
+   "nothing for product and fashion" is defensible; the unqualified version is not.
+2. **The true category peers for apparel are CLO3D, Browzwear and Style3D**, not Abacus. Browzwear: freelancer
+   $75 / mo or $750 / yr, enterprise roughly $200–500 / seat / mo. Style3D: $35–99 / mo individual, $299 / mo pro,
+   enterprise from about $10K / yr; it ended new permanent licences 2026-04-30. They model garments and write tech
+   packs. None render campaigns or hold a locked cast. This is the price band OCD•LOOKS' ELITE and LICENSE seats
+   sit far below.
+3. **Two honest gaps the chart now shows.** Flipsnack has catalogue publishing and per-page reader analytics with
+   lead capture. OCD•LOOKS has neither, and nothing in the build order adds them. Either scope them or say plainly
+   that the finished assets go out through the client's own catalogue tool.
+4. **Neither is a competitor for the same money.** Flipsnack starts where OCD•LOOKS ends, at distribution. Pacdora
+   is a different category of product. Abacus is a price anchor. None of the three put a garment on a model.
+
+---
+
 ## 4 · Where Abacus is a threat, and where it is not
 
 **Threat, real.**
