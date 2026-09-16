@@ -1,0 +1,26 @@
+---
+interface Props {
+	/** Use `ul` when the grid is a list of clips, so each child should be an `li`. */
+	as?: 'div' | 'ul';
+	/** Narrowest a column may get before the grid drops to fewer columns. */
+	min?: string;
+	class?: string;
+}
+
+const { as: Tag = 'div', min = '18rem', class: className } = Astro.props;
+---
+
+<Tag class:list={['video-grid', className]} style={`--min: ${min}`}>
+	<slot />
+</Tag>
+
+<style>
+	.video-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(var(--min), 100%), 1fr));
+		gap: 2rem;
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+	}
+</style>

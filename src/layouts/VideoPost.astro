@@ -1,0 +1,86 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import Video from '../components/Video.astro';
+
+type Props = CollectionEntry<'video'>['data'];
+
+const { title, description, pubDate, updatedDate, src, poster, captions, aspect } = Astro.props;
+
+// Social players only understand progressive MP4, so share that encoding if there is one.
+const files = Array.isArray(src) ? src : [src];
+const shareable = files.find((file) => file.endsWith('.mp4'));
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={title} description={description} image={poster} video={shareable} />
+		<style>
+			main {
+				width: 960px;
+			}
+			.player {
+				margin-bottom: 2em;
+			}
+			.prose {
+				width: 720px;
+				max-width: calc(100% - 2em);
+				margin: auto;
+				color: rgb(var(--gray-dark));
+			}
+			.title {
+				margin-bottom: 1em;
+				text-align: center;
+				line-height: 1;
+			}
+			.title h1 {
+				margin: 0 0 0.5em 0;
+			}
+			.date {
+				margin-bottom: 0.5em;
+				color: rgb(var(--gray));
+			}
+			.last-updated-on {
+				font-style: italic;
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+		<main>
+			<article>
+				<Video
+					class="player"
+					src={src}
+					poster={poster}
+					captions={captions}
+					aspect={aspect}
+					label={title}
+					preload="metadata"
+				/>
+				<div class="prose">
+					<div class="title">
+						<div class="date">
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<div class="last-updated-on">
+										Last updated on <FormattedDate date={updatedDate} />
+									</div>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						<hr />
+					</div>
+					<slot />
+				</div>
+			</article>
+		</main>
+		<Footer />
+	</body>
+</html>

@@ -1,0 +1,181 @@
+---
+interface Props {
+	/** One file, or several encodings of the same clip in preference order. */
+	src: string | string[];
+	poster?: string;
+	/** WebVTT captions file. Strongly recommended for any clip with speech. */
+	captions?: string;
+	/** Accessible name, for clips with no visible caption. */
+	label?: string;
+	aspect?: string;
+	/** Muted, looping, decorative background video. Starts itself when scrolled into view. */
+	ambient?: boolean;
+	loop?: boolean;
+	muted?: boolean;
+	controls?: boolean;
+	preload?: 'none' | 'metadata' | 'auto';
+	class?: string;
+}
+
+const MIME_TYPES: Record<string, string> = {
+	webm: 'video/webm',
+	mp4: 'video/mp4',
+	mov: 'video/quicktime',
+	ogv: 'video/ogg',
+};
+
+const {
+	src,
+	poster,
+	captions,
+	label,
+	aspect = '16 / 9',
+	ambient = false,
+	loop = ambient,
+	muted = ambient,
+	controls = !ambient,
+	preload = 'none',
+	class: className,
+} = Astro.props;
+
+const sources = (Array.isArray(src) ? src : [src]).map((url) => ({
+	url,
+	type: MIME_TYPES[url.split('.').pop()?.toLowerCase() ?? ''],
+}));
+const fallback = sources[sources.length - 1].url;
+---
+
+<figure class:list={['video', className]} style={`--aspect: ${aspect}`} data-ambient={ambient ? '' : undefined}>
+	<video
+		poster={poster}
+		preload={preload}
+		loop={loop || undefined}
+		muted={muted || undefined}
+		controls={controls || undefined}
+		playsinline
+		aria-label={label}
+	>
+		{sources.map(({ url, type }) => <source src={url} type={type} />)}
+		{captions && <track kind="captions" src={captions} srclang="en" label="English" default />}
+		<p>
+			Your browser can't play embedded video.
+			<a href={fallback} download>Download the clip</a> instead.
+		</p>
+	</video>
+	{
+		ambient && (
+			<button type="button" class="toggle" hidden>
+				<span class="sr-only">Pause video</span>
+				<svg class="pause" viewBox="0 0 16 16" aria-hidden="true" width="20" height="20">
+					<path fill="currentColor" d="M4 2h3v12H4zm5 0h3v12H9z" />
+				</svg>
+				<svg class="play" viewBox="0 0 16 16" aria-hidden="true" width="20" height="20">
+					<path fill="currentColor" d="M4 2l10 6-10 6z" />
+				</svg>
+			</button>
+		)
+	}
+	{Astro.slots.has('default') && (
+		<figcaption><slot /></figcaption>
+	)}
+</figure>
+
+<style>
+	.video {
+		position: relative;
+		margin: 0;
+	}
+	.video video {
+		display: block;
+		width: 100%;
+		aspect-ratio: var(--aspect);
+		object-fit: cover;
+		background-color: rgb(var(--gray-light));
+		border-radius: 8px;
+	}
+	.video figcaption {
+		margin-top: 0.5em;
+		color: rgb(var(--gray));
+		font-size: 0.8em;
+		line-height: 1.4;
+	}
+	.toggle {
+		position: absolute;
+		right: 0.75rem;
+		bottom: 0.75rem;
+		display: flex;
+		padding: 0.5rem;
+		color: white;
+		background-color: rgba(var(--black), 60%);
+		border: none;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+	.toggle:hover,
+	.toggle:focus-visible {
+		background-color: rgb(var(--black));
+	}
+	.toggle .pause {
+		display: none;
+	}
+	.video[data-playing] .toggle .pause {
+		display: block;
+	}
+	.video[data-playing] .toggle .play {
+		display: none;
+	}
+</style>
+
+<script>
+	// Ambient clips are driven from here rather than the `autoplay` attribute, so that
+	// a reduced-motion preference is honoured and nothing downloads until it's on screen.
+	const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+	for (const figure of document.querySelectorAll<HTMLElement>('.video[data-ambient]')) {
+		const video = figure.querySelector('video')!;
+		const toggle = figure.querySelector<HTMLButtonElement>('.toggle');
+		const status = toggle?.querySelector('.sr-only');
+
+		// Browsers only autoplay muted video, and only trust the property when we call play().
+		video.muted = true;
+
+		let wanted = !reduceMotion.matches;
+		let visible = false;
+
+		const sync = () => {
+			const playing = wanted && visible;
+			if (playing) {
+				video.play().catch(() => {
+					// Playback was blocked, so hand the viewer the native controls instead.
+					video.controls = true;
+					wanted = false;
+					figure.removeAttribute('data-playing');
+				});
+			} else {
+				video.pause();
+			}
+			figure.toggleAttribute('data-playing', playing);
+			if (status) status.textContent = wanted ? 'Pause video' : 'Play video';
+		};
+
+		new IntersectionObserver(
+			([entry]) => {
+				visible = entry.isIntersecting;
+				sync();
+			},
+			{ threshold: 0.25 },
+		).observe(figure);
+
+		toggle?.addEventListener('click', () => {
+			wanted = !wanted;
+			sync();
+		});
+		reduceMotion.addEventListener('change', (event) => {
+			wanted = !event.matches;
+			sync();
+		});
+
+		if (toggle) toggle.hidden = false;
+		sync();
+	}
+</script>

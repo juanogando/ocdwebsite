@@ -39,6 +39,25 @@ The `src/content/` directory contains "collections" of related Markdown and MDX 
 
 Any static assets, like images, can be placed in the `public/` directory.
 
+## 🎬 Videos
+
+Clips live in the `video` content collection (`src/content/video/`) and are listed at
+`/videos`. Each entry points at one or more files in `public/videos/` — see the notes in
+that folder for encoding, posters, captions and the Cloudflare file-size limit.
+
+`src/components/Video.astro` renders a single clip anywhere on the site:
+
+```astro
+<Video src={['/videos/clip.webm', '/videos/clip.mp4']} poster="/poster.jpg" aspect="9 / 16" />
+```
+
+Pass `ambient` for a muted, looping background video, as on the home page. Ambient clips
+start themselves only once they scroll into view, stay paused for visitors who prefer
+reduced motion, and carry a pause button. Nothing downloads until playback begins, so a
+poster is worth setting on every clip.
+
+Use `src/components/VideoGrid.astro` to lay several out in a responsive grid.
+
 ## 🧞 Commands
 
 All commands are run from the root of the project, from a terminal:
