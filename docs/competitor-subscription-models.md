@@ -105,3 +105,93 @@ one month plus setup exceeds the value of what can be extracted.
 - https://www.paulhastings.com/insights/client-alerts/updated-california-and-ftc-auto-renewal-regulations-take-effect
 - https://www.arnoldporter.com/en/perspectives/advisories/2026/02/ftc-and-state-ags-continue-to-scrutinize-subscription-practices
 - https://bltg-ip.com/how-to-protect-trade-secrets-in-an-nda-key-guidelines/
+
+---
+
+# Applied to OCD RAPID STUDIO · 2026-09-17
+
+**Status: PROPOSAL, not approved.** Nothing changes in `pricing.ts`, Clerk, `/pricing`
+or `/welcome` until Juan writes "approved". Ladder read from
+`OCD_PRICING_MASTER_2026-09-11.md` (approved 2026-09-15, ladder C + list/floor).
+
+## The ladder today
+
+| Plan | Monthly | Yearly | Credits | Term |
+|---|---:|---:|---:|---|
+| STUDENT | $14 | $140 | 120 | month-to-month |
+| STARTER | $19 | $190 | 160 | month-to-month, 3-day trial, 20-credit trial pack |
+| PRO | $39 seat | $390 | 300 | month-to-month |
+| ELITE | $129 seat | $1,290 | 800 | month-to-month |
+| LICENSE | $399 seat list / $349 floor | $4,190 ($349.17/mo) | 2,000 | month-to-month |
+| ENTERPRISE | $4,500 / 10 seats, $450 extra seat / $399 floor | by quote | 22,500 pooled | by quote |
+
+Yearly = 10 × monthly (≈17% off). Cancellation today: monthly ends at the paid month,
+yearly ends at the paid year, no partial refund.
+
+## Where the steal-and-cancel hole actually is
+
+Not the method. The method never leaves the app — the risk sits in three places that
+are already documented in the pricing master:
+
+1. **LICENSE is a permanent commercial license sold by the month.** $399 buys 2,000
+   credits *and* commercial rights. At list that is roughly 22 one-model Campaign
+   renders, or a full run of try-ons and packshots — a season of imagery. Download it,
+   cancel on day 29, keep the commercial license forever. This is the exact case
+   Envato and Motion Array wrote clauses against.
+2. **Credits never expire and survive cancellation** (against the 9/11 no-rollover
+   rule). Cancelling does not stop them spending OCD's engine money.
+3. **A teammate joining grants a full month of credits, per join, repeatable** —
+   ELITE $68.40, LICENSE $197.60 of engine cost each time.
+
+The trial hole is mostly closed (STARTER only, 3 days, 20 credits), but B-38 — no plan
+credits until the first paid charge — is still not built.
+
+## Proposed terms per tier
+
+| Tier | Proposed |
+|---|---|
+| STUDENT · STARTER · PRO | **Leave monthly.** Nothing to protect; the exposure is engine cost, which credits already meter. |
+| ELITE $129 | **Keep monthly.** Add the published/unpublished license split below. |
+| LICENSE $399 | **The commercial license attaches to a 12-month term, not to a month.** Sell it annual-only at $4,190 (holds the $349 floor), or keep monthly payment on a 12-month commitment where early cancellation ends the commercial grant. |
+| ENTERPRISE $4,500 | **12-month minimum, 24-month option, by invoice.** 60–90 day non-renewal notice (Bloomberg's pattern). Where API, KIKO or an in-network build is scoped: NDA, non-reverse-engineering, named seats, watermarked spec deliverables. Build fees stay 50% on signature / 50% on delivery, non-refundable. |
+
+## The clause that does the real work
+
+Cheaper and stronger than any minimum term, and it lets monthly stay on ELITE:
+
+> Commercial rights attach to work **published or placed** while the subscription is
+> active, and survive cancellation permanently. Renders downloaded but not yet
+> published lose their commercial grant when the subscription ends. Cast-a-Model brand
+> models and Stock Studio downloads follow the same rule.
+
+That is Motion Array's structure exactly, and Envato's. It kills the one-month grab
+without taking anything away from a customer who actually ran a campaign.
+
+## On a 2-year deal
+
+Juan's rule stands: no deal below the floor after every discount, and go deeper with
+bundles, not seat price. A Bloomberg-style 2-year discount of 3–5% off the $450
+ENTERPRISE seat lands at $427–$436, still above the $399 floor, so it is allowed — but
+the better sweetener is roadmap access (Multimedia Lookbooks, Packaging, Spec Creator)
+rather than dollars off the seat.
+
+## Two corrections to the notes
+
+- **B-28 is stale.** Clerk shipped per-seat plans on 2026-06-10 and supports annual
+  billing periods, including annual-only plans by leaving the monthly fee null. Team
+  yearly no longer has to be invoice-only, and LICENSE/ENTERPRISE can be made
+  annual-only in checkout. Verify in the dashboard before relying on it.
+- **Botika prices monthly as a penalty:** $33/mo billed annually versus $100/mo billed
+  monthly — 3× for the flexibility, against OCD's 10 × monthly (≈17%). Veesual and
+  Lalaland have no public self-serve pricing at all; they are contract-only. Raspberry
+  AI runs $49–$298 monthly self-serve with Enterprise by quote; CALA is $125 monthly /
+  $100 annual. At the $14–$129 level the whole market is monthly. At LICENSE and
+  ENTERPRISE level the whole market is a contract.
+
+## Added sources
+
+- https://clerk.com/changelog/2026-06-10-per-seat-plans
+- https://clerk.com/docs/guides/billing/seat-based-plans
+- https://botika.com/pricing
+- https://www.photta.app/pricing-and-reviews/botika
+- https://pixro.ai/blogs/pixro-vs-lalaland
