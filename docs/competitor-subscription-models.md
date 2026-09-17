@@ -118,15 +118,23 @@ or `/welcome` until Juan writes "approved". Ladder read from
 
 | Plan | Monthly | Yearly | Credits | Term |
 |---|---:|---:|---:|---|
-| STUDENT | $14 | $140 | 120 | month-to-month |
-| STARTER | $19 | $190 | 160 | month-to-month, 3-day trial, 20-credit trial pack |
-| PRO | $39 seat | $390 | 300 | month-to-month |
-| ELITE | $129 seat | $1,290 | 800 | month-to-month |
-| LICENSE | $399 seat list / $349 floor | $4,190 ($349.17/mo) | 2,000 | month-to-month |
+| STUDENT | $14 | not in the 9/17 list | 120 | month-to-month |
+| STARTER | $19 | **$209** | 160 | month-to-month, 3-day trial, 20-credit trial pack |
+| PRO | $39 seat | **$429** | 300 | month-to-month |
+| ELITE | $129 seat | **$1,419** | 800 | month-to-month |
+| LICENSE | $399 seat list / $349 floor | **$4,389** ($365.75/mo) | 2,000 | month-to-month |
 | ENTERPRISE | $4,500 / 10 seats, $450 extra seat / $399 floor | by quote | 22,500 pooled | by quote |
 
-Yearly = 10 × monthly (≈17% off). Cancellation today: monthly ends at the paid month,
-yearly ends at the paid year, no partial refund.
+**Yearly = one month off (11 × monthly), ≈8.3%** — approved 2026-09-17, commit
+`023cb2d`. The older "10 × monthly" rule from the 9/11 master is superseded.
+Same commit approved 360 EXACT at **720p 50 cr/s** (5 s = 250, 10 s = 500) and
+**1080p 90 cr/s** (5 s = 450, 10 s = 900).
+
+App address since 9/16: **ocdrapidstudio.ogandocreativedesign.com**;
+ogandocreativedesign.com and www now redirect to the app (`e57c92f`).
+
+Cancellation today: monthly ends at the paid month, yearly ends at the paid year, no
+partial refund.
 
 ## Where the steal-and-cancel hole actually is
 
@@ -152,7 +160,7 @@ credits until the first paid charge — is still not built.
 |---|---|
 | STUDENT · STARTER · PRO | **Leave monthly.** Nothing to protect; the exposure is engine cost, which credits already meter. |
 | ELITE $129 | **Keep monthly.** Add the published/unpublished license split below. |
-| LICENSE $399 | **The commercial license attaches to a 12-month term, not to a month.** Sell it annual-only at $4,190 (holds the $349 floor), or keep monthly payment on a 12-month commitment where early cancellation ends the commercial grant. |
+| LICENSE $399 | **The commercial license attaches to a 12-month term, not to a month.** Annual is already $4,389 ($365.75/mo effective), clear of the $349 floor — so selling LICENSE annual-only costs nothing against the floor rule. Or keep monthly payment on a 12-month commitment where early cancellation ends the commercial grant. |
 | ENTERPRISE $4,500 | **12-month minimum, 24-month option, by invoice.** 60–90 day non-renewal notice (Bloomberg's pattern). Where API, KIKO or an in-network build is scoped: NDA, non-reverse-engineering, named seats, watermarked spec deliverables. Build fees stay 50% on signature / 50% on delivery, non-refundable. |
 
 ## The clause that does the real work
@@ -175,23 +183,55 @@ ENTERPRISE seat lands at $427–$436, still above the $399 floor, so it is allow
 the better sweetener is roadmap access (Multimedia Lookbooks, Packaging, Spec Creator)
 rather than dollars off the seat.
 
-## Two corrections to the notes
+## What the existing competitor study already covers
 
-- **B-28 is stale.** Clerk shipped per-seat plans on 2026-06-10 and supports annual
-  billing periods, including annual-only plans by leaving the monthly fee null. Team
-  yearly no longer has to be invoice-only, and LICENSE/ENTERPRISE can be made
-  annual-only in checkout. Verify in the dashboard before relying on it.
-- **Botika prices monthly as a penalty:** $33/mo billed annually versus $100/mo billed
-  monthly — 3× for the flexibility, against OCD's 10 × monthly (≈17%). Veesual and
-  Lalaland have no public self-serve pricing at all; they are contract-only. Raspberry
-  AI runs $49–$298 monthly self-serve with Enterprise by quote; CALA is $125 monthly /
-  $100 annual. At the $14–$129 level the whole market is monthly. At LICENSE and
-  ENTERPRISE level the whole market is a contract.
+`COMPETITOR_ANALYSIS_2026-09-14.md` (38 KB, 54 sources, 30+ vendors) already carries the
+pricing table, feature matrix and best-price-per-service work. It does **not** cover
+contract term, minimum commitment, or what happens to a licence on cancellation — that
+is the gap this note fills, and the only reason to keep it.
+
+⚠️ **Retracted:** an earlier draft of this note cited Botika at "$33/mo annual vs
+$100/mo monthly" from a third-party page. The 9/14 study reads Botika off the vendor's
+own page as Pro $55 / Advanced $100 and explicitly flags that page's annual and credit
+labels as reading inconsistently. The vendor-page read wins; the third-party figure is
+withdrawn.
+
+## Clerk: what is actually established
+
+- B-28 (2026-08-31) recorded that Clerk had no annual per-seat billing, which is why
+  team yearly goes out by invoice.
+- Clerk has since shipped per-seat plans (2026-06-10) and supports annual billing
+  periods, and the 9/17 session set STARTER's annual field directly in Clerk
+  ($17.42 → $209.04, still open as **B-51**).
+- **Not established:** per-seat *and* annual together on a team plan in this account's
+  dashboard. STARTER is individual billing, so B-51 does not prove it. Check the
+  dashboard before assuming LICENSE can be sold annual-only in checkout rather than by
+  invoice.
+
+## Market shape at OCD's price points
+
+At $14–$129 the market is monthly: FASHN $19, Modelia $35, Raspberry AI $49, Vizcom
+$49, FASHN Agency $99, Botika Advanced $100. At LICENSE and ENTERPRISE level it turns
+into a contract: Veesual and Lalaland publish no self-serve price at all, CAD
+enterprise is quote-only, Optitex is ≈$3,000/seat. Nothing in either camp publishes a
+minimum term, which is exactly why term is worth setting deliberately rather than
+copying.
 
 ## Added sources
 
 - https://clerk.com/changelog/2026-06-10-per-seat-plans
 - https://clerk.com/docs/guides/billing/seat-based-plans
-- https://botika.com/pricing
-- https://www.photta.app/pricing-and-reviews/botika
-- https://pixro.ai/blogs/pixro-vs-lalaland
+- Internal, read 2026-09-17: `OCD_PRICING_MASTER_2026-09-11.md` ·
+  `SESSION_RECAP_2026-09-17_BILINGUAL_SITE_PRICES_DOMAIN_SOCIAL.md` ·
+  `COMPETITOR_ANALYSIS_2026-09-14.md` · `CLAUDE_C-NOTES_INDEX.md` ·
+  `PROPOSAL_SERVICE_PRICING_CONTROL_TIERS_2026-09-16.md` (all via the G: Drive mirror)
+
+## Reading limits on this note
+
+Written from a cloud session. Reachable: the G: Drive mirror and the Dropbox
+`OCD_CLAUDE_BRIDGE` folder. **Not reachable: C:, D:, M:** — no Windows volume is
+mounted in this container. Per the C-NOTES index the `M:\OCD\claude_app_syncs\` copies
+of the index and `_BLOCKERS.md` are read-only mirrors carrying a SUPERSEDED header, so
+M: would not have been current anyway. `_BLOCKERS.md` was located on the mirror but not
+read in full; B-28 and B-51 above are quoted from the recaps, not from the blockers
+page.
