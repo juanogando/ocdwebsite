@@ -1,0 +1,158 @@
+---
+import StudioPage from '../../layouts/StudioPage.astro';
+import AnnotationDemo from '../../components/AnnotationDemo.astro';
+import BriefForm from '../../components/BriefForm.astro';
+import {
+	STUDIO_DESCRIPTION,
+	STUDIO_TAGLINE,
+	STUDIO_TITLE,
+	process,
+	services,
+} from '../../data/rapid-studio';
+
+const featured = services.filter((service) => service.featured);
+const rest = services.filter((service) => !service.featured);
+---
+
+<StudioPage
+	title={STUDIO_TITLE}
+	description={STUDIO_DESCRIPTION}
+	eyebrow="Studio"
+	lede={STUDIO_TAGLINE}
+>
+	<p class="intro">{STUDIO_DESCRIPTION}</p>
+
+	<AnnotationDemo caption="One frame, one round: circle the car, arrow the walk, cross the sign, protect the face." />
+
+	<h2>What the studio takes on</h2>
+	<div class="services">
+		{
+			featured.map((service) => (
+				<a class="service featured" href={service.href}>
+					<p class="tag">New</p>
+					<h3>{service.name}</h3>
+					<p>{service.summary}</p>
+					<p class="turnaround">{service.turnaround}</p>
+				</a>
+			))
+		}
+		<div class="grid">
+			{
+				rest.map((service) => (
+					<a class="service" href={service.href}>
+						<h3>{service.name}</h3>
+						<p>{service.summary}</p>
+						<p class="turnaround">{service.turnaround}</p>
+					</a>
+				))
+			}
+		</div>
+	</div>
+
+	<h2>How a job runs</h2>
+	<ol class="process">
+		{
+			process.map((step) => (
+				<li>
+					<h3>{step.title}</h3>
+					<p>{step.body}</p>
+				</li>
+			))
+		}
+	</ol>
+
+	<BriefForm service="Rapid Studio" />
+</StudioPage>
+
+<style>
+	.intro {
+		font-size: 1.1em;
+	}
+	h2 {
+		margin-top: 2em;
+		font-size: 1.953em;
+	}
+	.services {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2em;
+	}
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.2em;
+	}
+	.service {
+		display: block;
+		padding: 1.5em;
+		color: inherit;
+		text-decoration: none;
+		background: #fff;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+	}
+	.service:hover {
+		border-color: var(--accent);
+	}
+	.service h3 {
+		font-size: 1.4em;
+		margin-bottom: 0.4em;
+	}
+	.service p {
+		margin-bottom: 0;
+		font-size: 0.95em;
+	}
+	.featured {
+		border-left: 6px solid var(--accent);
+	}
+	.featured h3 {
+		font-size: 1.953em;
+	}
+	.featured p:not(.tag):not(.turnaround) {
+		font-size: 1.1em;
+	}
+	.tag {
+		margin: 0 0 0.5em 0;
+		font-size: 0.75em !important;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--accent);
+	}
+	.turnaround {
+		margin-top: 0.8em;
+		font-size: 0.85em !important;
+		color: rgb(var(--gray));
+	}
+	.process {
+		list-style: none;
+		counter-reset: step;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5em;
+	}
+	.process li {
+		counter-increment: step;
+		padding-top: 0.8em;
+		border-top: 2px solid rgb(var(--gray-light));
+	}
+	.process h3 {
+		font-size: 1.25em;
+		margin-bottom: 0.3em;
+	}
+	.process h3::before {
+		content: counter(step) ' · ';
+		color: rgb(var(--gray));
+	}
+	.process p {
+		margin-bottom: 0;
+		font-size: 0.95em;
+	}
+	@media (max-width: 720px) {
+		.grid,
+		.process {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

@@ -1,0 +1,198 @@
+---
+import StudioPage from '../../layouts/StudioPage.astro';
+import AnnotationDemo from '../../components/AnnotationDemo.astro';
+import BriefForm from '../../components/BriefForm.astro';
+import { canDirect, limits, marks, process, tiers } from '../../data/rapid-studio';
+
+const title = 'Directed Edits';
+const description =
+	'Draw on the frame and we execute the mark. Circle what changes, arrow where it goes, cross out what leaves, green what must not move.';
+---
+
+<StudioPage
+	title={title}
+	description={description}
+	eyebrow="OCD Rapid Studio"
+	lede="You draw on the frame. We execute the mark."
+>
+	<p class="intro">
+		Describing an edit in a paragraph is slower than drawing it, and less exact. So don't describe
+		it. Mark the frame the way a director marks a contact sheet — a circle, an arrow, a cross, one
+		line of text — and send it. Every mark is one instruction, and the work comes back against the
+		marks you drew rather than against an interpretation of them.
+	</p>
+
+	<AnnotationDemo caption="Circle the car — take it out. Arrow the figure — walk her to the doorway. Cross the sign — it goes. Green on the face — hold it." />
+
+	<h2>The mark language</h2>
+	<p>This is the whole grammar. Any app that draws on a photo is enough to write it.</p>
+	<dl class="marks">
+		{
+			marks.map((mark) => (
+				<div class="mark" id={mark.id}>
+					<dt>
+						<span class="swatch" style={`background:${mark.color}`} aria-hidden="true" />
+						{mark.name}
+					</dt>
+					<dd>{mark.means}</dd>
+				</div>
+			))
+		}
+	</dl>
+
+	<h2>What a mark can ask for</h2>
+	<ul class="can">
+		{canDirect.map((item) => <li>{item}</li>)}
+	</ul>
+
+	<h2>How a round runs</h2>
+	<ol class="process">
+		{
+			process.map((step) => (
+				<li>
+					<h3>{step.title}</h3>
+					<p>{step.body}</p>
+				</li>
+			))
+		}
+	</ol>
+
+	<h2>Turnaround</h2>
+	<div class="tiers">
+		{
+			tiers.map((tier) => (
+				<div class="tier">
+					<h3>{tier.name}</h3>
+					<p class="turnaround">{tier.turnaround}</p>
+					<p class="price">{tier.price}</p>
+					<p>{tier.rounds}</p>
+					<p class="best">{tier.best}</p>
+				</div>
+			))
+		}
+	</div>
+	<p class="note">
+		Every tier delivers the finished frame at the resolution you sent, the variants from that round,
+		and your annotated frame back alongside them.
+	</p>
+
+	<h2>What a mark can't do</h2>
+	<ul class="limits">
+		{limits.map((item) => <li>{item}</li>)}
+	</ul>
+
+	<BriefForm service={title} />
+</StudioPage>
+
+<style>
+	.intro {
+		font-size: 1.1em;
+	}
+	h2 {
+		margin-top: 2em;
+		font-size: 1.953em;
+	}
+	.marks {
+		margin: 1.5em 0 0 0;
+	}
+	.mark {
+		padding: 1em 0;
+		border-top: 1px solid rgb(var(--gray-light));
+	}
+	.mark:last-child {
+		border-bottom: 1px solid rgb(var(--gray-light));
+	}
+	dt {
+		display: flex;
+		align-items: center;
+		gap: 0.6em;
+		font-weight: 700;
+		color: rgb(var(--black));
+	}
+	dd {
+		margin: 0.3em 0 0 1.85em;
+		font-size: 0.95em;
+	}
+	.swatch {
+		display: inline-block;
+		width: 1.25em;
+		height: 1.25em;
+		border-radius: 50%;
+		flex: none;
+	}
+	.can,
+	.limits {
+		padding-left: 1.2em;
+	}
+	.can li,
+	.limits li {
+		margin-bottom: 0.6em;
+	}
+	.process {
+		list-style: none;
+		counter-reset: step;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1.5em;
+	}
+	.process li {
+		counter-increment: step;
+		padding-top: 0.8em;
+		border-top: 2px solid rgb(var(--gray-light));
+	}
+	.process h3 {
+		font-size: 1.25em;
+		margin-bottom: 0.3em;
+	}
+	.process h3::before {
+		content: counter(step) ' · ';
+		color: rgb(var(--gray));
+	}
+	.process p {
+		margin-bottom: 0;
+		font-size: 0.95em;
+	}
+	.tiers {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 1.2em;
+	}
+	.tier {
+		padding: 1.4em;
+		background: #fff;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+	}
+	.tier h3 {
+		font-size: 1.4em;
+		margin-bottom: 0.2em;
+	}
+	.tier p {
+		font-size: 0.9em;
+		margin-bottom: 0.6em;
+	}
+	.tier .turnaround {
+		color: var(--accent);
+		font-weight: 700;
+	}
+	.tier .price {
+		font-size: 1.1em;
+		color: rgb(var(--black));
+	}
+	.tier .best {
+		margin-bottom: 0;
+		color: rgb(var(--gray));
+	}
+	.note {
+		margin-top: 1.2em;
+		font-size: 0.9em;
+		color: rgb(var(--gray));
+	}
+	@media (max-width: 720px) {
+		.process,
+		.tiers {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

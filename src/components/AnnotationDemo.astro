@@ -1,0 +1,131 @@
+---
+// A schematic of one round: the frame as shot, and the same frame with the
+// client's marks on it. Pure CSS toggle — no script, no image assets.
+interface Props {
+	caption?: string;
+}
+const { caption } = Astro.props;
+---
+
+<figure class="demo">
+	<input type="checkbox" id="show-marks" checked />
+	<div class="frame">
+		<svg viewBox="0 0 640 400" role="img" aria-label="A street frame with a car, a figure and a doorway. Editing marks are drawn over it: a red lasso around the car, a red arrow from the figure toward the doorway, a red cross over a sign on the facade, and a green outline protecting the figure's face.">
+			<!-- The plate -->
+			<rect width="640" height="400" fill="#c9cdd4"></rect>
+			<rect y="250" width="640" height="150" fill="#9aa1ab"></rect>
+			<rect x="30" y="60" width="150" height="190" fill="#b2b8c0"></rect>
+			<rect x="470" y="30" width="140" height="220" fill="#b8bec6"></rect>
+			<rect x="505" y="120" width="70" height="130" fill="#8f96a0"></rect>
+			<!-- Car -->
+			<rect x="60" y="180" width="180" height="55" rx="12" fill="#6f7681"></rect>
+			<rect x="100" y="150" width="100" height="40" rx="10" fill="#7d838d"></rect>
+			<circle cx="105" cy="238" r="17" fill="#4b5158"></circle>
+			<circle cx="205" cy="238" r="17" fill="#4b5158"></circle>
+			<!-- Figure -->
+			<circle cx="330" cy="150" r="20" fill="#5b616b"></circle>
+			<rect x="312" y="172" width="36" height="80" rx="14" fill="#5b616b"></rect>
+			<rect x="316" y="248" width="12" height="60" rx="6" fill="#5b616b"></rect>
+			<rect x="334" y="248" width="12" height="60" rx="6" fill="#5b616b"></rect>
+			<!-- Sign on the facade -->
+			<rect x="486" y="52" width="58" height="36" rx="4" fill="#767d87"></rect>
+
+			<!-- The marks -->
+			<g class="marks" fill="none" stroke-linecap="round" stroke-linejoin="round">
+				<path
+					d="M48 205 C40 160 95 128 160 130 C230 132 262 165 256 205 C250 246 205 262 150 260 C92 258 55 243 48 205 Z"
+					stroke="#d32020"
+					stroke-width="7"></path>
+				<path d="M362 222 L492 222" stroke="#d32020" stroke-width="7"></path>
+				<path d="M470 206 L496 222 L470 238" stroke="#d32020" stroke-width="7"></path>
+				<path d="M478 44 L552 96 M552 44 L478 96" stroke="#d32020" stroke-width="7"></path>
+				<circle cx="330" cy="150" r="30" stroke="#1a7f45" stroke-width="6"></circle>
+			</g>
+		</svg>
+		<p class="state" aria-hidden="true">
+			<span class="marked">Marked frame</span><span class="plate">Frame as shot</span>
+		</p>
+	</div>
+	<figcaption>
+		<label for="show-marks">Show the marks</label>
+		{caption && <span>{caption}</span>}
+	</figcaption>
+</figure>
+
+<style>
+	.demo {
+		margin: 0 0 2.5em 0;
+	}
+	.demo input {
+		position: absolute;
+		opacity: 0;
+		width: 1px;
+		height: 1px;
+	}
+	.frame {
+		position: relative;
+		border-radius: 8px;
+		overflow: hidden;
+		box-shadow: var(--box-shadow);
+	}
+	svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+	.marks {
+		opacity: 0;
+		transition: opacity 180ms ease-in-out;
+	}
+	.demo input:checked ~ .frame .marks {
+		opacity: 1;
+	}
+	.state {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		margin: 0;
+		padding: 0.35em 0.9em;
+		font-size: 0.75em;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: #fff;
+		background: rgba(var(--black), 75%);
+		border-top-right-radius: 8px;
+	}
+	.state .marked {
+		display: none;
+	}
+	.demo input:checked ~ .frame .state .marked {
+		display: inline;
+	}
+	.demo input:checked ~ .frame .state .plate {
+		display: none;
+	}
+	figcaption {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.75em 1em;
+		margin-top: 0.9em;
+		font-size: 0.85em;
+		color: rgb(var(--gray));
+	}
+	figcaption label {
+		flex: none;
+		padding: 0.35em 0.9em;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 999px;
+		color: rgb(var(--gray-dark));
+		background: #fff;
+		cursor: pointer;
+	}
+	.demo input:checked ~ figcaption label {
+		border-color: var(--accent);
+		color: var(--accent);
+	}
+	.demo input:focus-visible ~ figcaption label {
+		outline: 2px solid var(--accent);
+		outline-offset: 2px;
+	}
+</style>

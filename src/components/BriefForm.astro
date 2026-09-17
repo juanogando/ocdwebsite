@@ -1,0 +1,150 @@
+---
+import { STUDIO_EMAIL, tiers } from '../data/rapid-studio';
+
+interface Props {
+	service?: string;
+}
+const { service = 'Directed Edits' } = Astro.props;
+---
+
+<section id="brief" class="brief">
+	<h2>Send a brief</h2>
+	<p>
+		Fill this in and it opens a pre-written email in your own mail app — attach the marked frame
+		there and send. Nothing is submitted from this page. You can also just write to
+		<a href={`mailto:${STUDIO_EMAIL}`}>{STUDIO_EMAIL}</a> and attach the frame.
+	</p>
+
+	<form data-brief data-email={STUDIO_EMAIL} data-service={service}>
+		<div class="row">
+			<label>
+				Your name
+				<input type="text" name="name" autocomplete="name" required />
+			</label>
+			<label>
+				Email
+				<input type="email" name="email" autocomplete="email" required />
+			</label>
+		</div>
+		<label>
+			What is the frame, and where is it going?
+			<input type="text" name="context" placeholder="Lookbook hero, going to paid social on Friday" />
+		</label>
+		<label>
+			Turnaround
+			<select name="tier">
+				{tiers.map((tier) => <option value={tier.name}>{tier.name} — {tier.turnaround}</option>)}
+			</select>
+		</label>
+		<label>
+			The marks, in words
+			<textarea
+				name="notes"
+				rows="5"
+				placeholder="Lasso on the car: take it out. Arrow on the figure: walk her toward the doorway. Green on her face."
+			></textarea>
+		</label>
+		<button type="submit">Compose the brief</button>
+	</form>
+</section>
+
+<style>
+	.brief {
+		margin-top: 3em;
+		padding: 2em;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 12px;
+		background: #fff;
+	}
+	.brief h2 {
+		font-size: 1.953em;
+	}
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.2em;
+		margin-top: 1.5em;
+	}
+	.row {
+		display: flex;
+		gap: 1.2em;
+	}
+	.row label {
+		flex: 1;
+	}
+	label {
+		display: block;
+		font-size: 0.85em;
+		font-weight: 700;
+		color: rgb(var(--gray-dark));
+	}
+	input,
+	select,
+	textarea {
+		display: block;
+		width: 100%;
+		box-sizing: border-box;
+		margin-top: 0.4em;
+		padding: 0.6em 0.7em;
+		font-family: inherit;
+		font-size: 16px;
+		font-weight: 400;
+		color: rgb(var(--gray-dark));
+		background: #fff;
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 6px;
+	}
+	input:focus-visible,
+	select:focus-visible,
+	textarea:focus-visible {
+		outline: 2px solid var(--accent);
+		outline-offset: 1px;
+	}
+	button {
+		align-self: flex-start;
+		padding: 0.7em 1.4em;
+		font-family: inherit;
+		font-size: 1em;
+		color: #fff;
+		background: var(--accent);
+		border: none;
+		border-radius: 999px;
+		cursor: pointer;
+	}
+	button:hover {
+		background: var(--accent-dark);
+	}
+	@media (max-width: 720px) {
+		.brief {
+			padding: 1.25em;
+		}
+		.row {
+			flex-direction: column;
+		}
+	}
+</style>
+
+<script>
+	document.querySelectorAll<HTMLFormElement>('form[data-brief]').forEach((form) => {
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+			const data = new FormData(form);
+			const value = (field: string) => String(data.get(field) ?? '').trim();
+			const service = form.dataset.service ?? 'Rapid Studio';
+			const body = [
+				`Name: ${value('name')}`,
+				`Email: ${value('email')}`,
+				`Frame and placement: ${value('context')}`,
+				`Turnaround: ${value('tier')}`,
+				'',
+				'The marks:',
+				value('notes'),
+				'',
+				'(Marked frame attached.)',
+			].join('\n');
+			const to = form.dataset.email ?? '';
+			const subject = `${service} brief — ${value('name')}`;
+			window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+		});
+	});
+</script>

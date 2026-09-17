@@ -29,6 +29,17 @@ npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-start
 
 A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
 
+## OCD Rapid Studio
+
+The studio section lives at `/rapid-studio`, with the Directed Edits offering at
+`/rapid-studio/directed-edits`. All of its copy — services, the mark language,
+process, turnaround tiers and the brief address — is in `src/data/rapid-studio.ts`,
+so the pages themselves rarely need editing. Two things are placeholders there:
+`STUDIO_EMAIL`, and the prices on each tier, which read "On request" until they are set.
+
+The brief form has no backend. It builds a pre-filled `mailto:` link in the
+visitor's own mail client, where they attach the marked frame.
+
 ## 🚀 Project Structure
 
 Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
