@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="A 9:00 morning alarm whose personable note scrolls across the screen.">
+<link rel="icon" href="/favicon.svg">
+<title>Nine O'Clock Note</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+  :root {
+    --ground: #efedf2;
+    --surface: #ffffff;
+    --ink: #17151f;
+    --muted: #6b6676;
+    --rule: #d8d4de;
+    --accent: #4f3de8;
+    --alarm: #e8452f;
+    --shadow: 0 18px 50px -24px rgba(23, 21, 31, .45);
+    --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #141219;
+      --surface: #1d1a24;
+      --ink: #f0edf5;
+      --muted: #9a94a6;
+      --rule: #302b3a;
+      --accent: #a99bff;
+      --alarm: #ff6b54;
+      --shadow: 0 18px 50px -20px rgba(0, 0, 0, .7);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ground: #141219;
+    --surface: #1d1a24;
+    --ink: #f0edf5;
+    --muted: #9a94a6;
+    --rule: #302b3a;
+    --accent: #a99bff;
+    --alarm: #ff6b54;
+    --shadow: 0 18px 50px -20px rgba(0, 0, 0, .7);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--display);
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 28px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px 20px;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 12px;
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0;
+  }
+  .eyebrow b { color: var(--accent); font-weight: 500; }
+
+  .clockblock { display: flex; flex-direction: column; gap: 6px; }
+  .clock {
+    font-size: clamp(64px, 17vw, 148px);
+    font-weight: 700;
+    line-height: .92;
+    letter-spacing: -.045em;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .clock .sec { color: var(--muted); font-size: .34em; letter-spacing: -.02em; }
+  .datel {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+    letter-spacing: .02em;
+  }
+  .countdown { color: var(--ink); }
+
+  .band {
+    position: relative;
+    border-block: 1px solid var(--rule);
+    background: var(--surface);
+    padding-block: 18px;
+    overflow: hidden;
+    margin-inline: -20px;
+  }
+  .band::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .marquee { display: flex; width: max-content; will-change: transform; animation: slide linear infinite; }
+  .marquee.paused { animation-play-state: paused; }
+  .marquee span {
+    font-family: var(--serif);
+    font-size: clamp(22px, 4.2vw, 40px);
+    line-height: 1.25;
+    white-space: pre;
+    padding-right: 3ch;
+  }
+  .marquee .mark { color: var(--accent); font-family: var(--display); font-size: .7em; vertical-align: .18em; }
+  @keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee { animation: none; width: auto; }
+    .marquee span:nth-child(2) { display: none; }
+    .marquee span { white-space: normal; padding-right: 0; }
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 20px;
+    display: grid;
+    gap: 16px;
+  }
+  .panel h2 {
+    font-size: 15px;
+    margin: 0;
+    font-weight: 500;
+    letter-spacing: -.01em;
+  }
+  .hint { font-family: var(--mono); font-size: 12px; color: var(--muted); margin: 0; line-height: 1.5; }
+  textarea {
+    width: 100%;
+    min-height: 110px;
+    resize: vertical;
+    font-family: var(--serif);
+    font-size: 17px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    padding: 12px 14px;
+  }
+  textarea:focus-visible, input:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .field { display: flex; align-items: center; gap: 8px; }
+  label.lab {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  input[type="time"] {
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 8px 10px;
+    color: var(--ink);
+    background: var(--ground);
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+  }
+  button {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    border-radius: 3px;
+    border: 1px solid var(--rule);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+  button.primary:hover { color: var(--surface); filter: brightness(1.08); }
+  .status { font-family: var(--mono); font-size: 11px; color: var(--muted); min-height: 1.2em; margin: 0; }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: color-mix(in srgb, var(--ground) 86%, #000 14%);
+    backdrop-filter: blur(6px);
+  }
+  .alarmcard {
+    width: min(760px, 100%);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--alarm);
+    border-radius: 4px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .alarmhead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px 10px;
+  }
+  .alarmhead .big {
+    font-size: clamp(38px, 9vw, 62px);
+    font-weight: 700;
+    letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums;
+    margin: 0;
+  }
+  .ringing {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--alarm);
+  }
+  .ringing::before {
+    content: "";
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--alarm);
+    margin-right: 7px;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+  @media (prefers-reduced-motion: reduce) { .ringing::before { animation: none; } }
+  .alarmcard .band { margin-inline: 0; background: transparent; }
+  .alarmactions { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px 22px 20px; }
+  @media (max-width: 480px) { .wrap { gap: 22px; } .panel { padding: 16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="topbar">
+    <p class="eyebrow">OCD Studio <b>&mdash;</b> Morning Call</p>
+    <p class="eyebrow" id="tzline">Alarm set for 09:00</p>
+  </header>
+
+  <section class="clockblock">
+    <h1 class="clock" id="clock">--:--<span class="sec">:--</span></h1>
+    <p class="datel" id="dateline">&nbsp;</p>
+  </section>
+
+  <section class="band" aria-label="Your morning note">
+    <div class="marquee" id="marquee">
+      <span id="note-a"></span><span id="note-b" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Make it yours</h2>
+    <p class="hint">This is the note that scrolls &mdash; above, and inside the 9:00 popup. Write it the way you'd want to hear it at 9am. Use <b>/</b> between lines to break it into scrolling beats.</p>
+    <textarea id="editor" spellcheck="true" aria-label="Your scrolling note"></textarea>
+    <div class="row">
+      <button class="primary" id="save" type="button">Save note</button>
+      <button id="preview" type="button">Preview the popup</button>
+      <button id="chime" type="button" aria-pressed="false">Chime: off</button>
+      <div class="field">
+        <label class="lab" for="alarmtime">Alarm</label>
+        <input type="time" id="alarmtime" value="09:00">
+      </div>
+    </div>
+    <p class="status" id="status">&nbsp;</p>
+  </section>
+</div>
+
+<div class="overlay" id="overlay" hidden role="dialog" aria-modal="true" aria-labelledby="alarmtitle">
+  <div class="alarmcard">
+    <div class="alarmhead">
+      <p class="big" id="alarmtitle">9:00</p>
+      <span class="ringing">Morning call</span>
+    </div>
+    <div class="band" aria-label="Your morning note">
+      <div class="marquee" id="marquee2">
+        <span id="pop-a"></span><span id="pop-b" aria-hidden="true"></span>
+      </div>
+    </div>
+    <div class="alarmactions">
+      <button class="primary" id="dismiss" type="button">I'm up</button>
+      <button id="snooze" type="button">Snooze 9 min</button>
+      <button id="edit-from-popup" type="button">Rewrite the note</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var DEFAULT_NOTE = [
+    "Good morning, Juan.",
+    "The studio is yours for the next hour — before the inbox gets a vote.",
+    "One look. One detail. One decision.",
+    "Then the thing you were avoiding yesterday.",
+    "Rewrite this note so it sounds like you."
+  ].join(" / ");
+
+  var DOC = "notes/morning";
+  var LS_NOTE = "ninenote.text";
+  var LS_TIME = "ninenote.time";
+  var LS_CHIME = "ninenote.chime";
+
+  var el = function (id) { return document.getElementById(id); };
+  var clock = el("clock"), dateline = el("dateline"), tzline = el("tzline");
+  var editor = el("editor"), statusEl = el("status"), overlay = el("overlay");
+  var alarmInput = el("alarmtime"), chimeBtn = el("chime"), alarmTitle = el("alarmtitle");
+
+  var state = {
+    note: DEFAULT_NOTE,
+    time: "09:00",
+    chime: false,
+    firedKey: null,
+    snoozeUntil: 0,
+    db: null
+  };
+
+  function lsGet(key, fallback) {
+    try { var v = localStorage.getItem(key); return v === null ? fallback : v; }
+    catch (e) { return fallback; }
+  }
+  function lsSet(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* private window */ }
+  }
+
+  function say(message) { statusEl.textContent = message; }
+
+  /* ---- the scrolling note ---- */
+  function beats(text) {
+    return text.split("/").map(function (s) { return s.trim(); }).filter(Boolean);
+  }
+  function render(text) {
+    var line = beats(text).join("   ✦   ") || " ";
+    ["note-a", "note-b", "pop-a", "pop-b"].forEach(function (id) {
+      var node = el(id);
+      if (node) node.textContent = line + "   ✦   ";
+    });
+    requestAnimationFrame(tune);
+  }
+  function tune() {
+    [el("marquee"), el("marquee2")].forEach(function (track) {
+      if (!track) return;
+      var half = track.scrollWidth / 2;
+      if (!half) return;
+      var seconds = Math.max(14, Math.round(half / 55));
+      track.style.animationDuration = seconds + "s";
+    });
+  }
+  window.addEventListener("resize", tune);
+
+  /* ---- clock + alarm watch ---- */
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+  function tick() {
+    var now = new Date();
+    clock.innerHTML = pad(now.getHours()) + ":" + pad(now.getMinutes()) +
+      '<span class="sec">:' + pad(now.getSeconds()) + "</span>";
+
+    var parts = state.time.split(":");
+    var target = new Date(now);
+    target.setHours(Number(parts[0]), Number(parts[1]), 0, 0);
+    if (target <= now) target = new Date(target.getTime() + 86400000);
+    var mins = Math.round((target - now) / 60000);
+    var h = Math.floor(mins / 60), m = mins % 60;
+
+    dateline.textContent = now.toLocaleDateString(undefined, {
+      weekday: "long", month: "long", day: "numeric"
+    }) + "  ·  next call in " + (h ? h + "h " : "") + m + "m";
+    tzline.textContent = "Alarm set for " + state.time;
+
+    var key = now.toDateString() + " " + state.time;
+    var due = pad(now.getHours()) + ":" + pad(now.getMinutes()) === state.time && state.firedKey !== key;
+    if (due) { state.firedKey = key; ring(); }
+    else if (state.snoozeUntil && now.getTime() >= state.snoozeUntil) { state.snoozeUntil = 0; ring(); }
+  }
+
+  /* ---- the popup ---- */
+  var lastFocus = null;
+  function ring() {
+    alarmTitle.textContent = state.time.replace(/^0/, "");
+    lastFocus = document.activeElement;
+    overlay.hidden = false;
+    tune();
+    el("dismiss").focus();
+    playChime();
+  }
+  function close() {
+    overlay.hidden = true;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  el("dismiss").addEventListener("click", function () { state.snoozeUntil = 0; close(); });
+  el("snooze").addEventListener("click", function () {
+    state.snoozeUntil = Date.now() + 9 * 60000;
+    close();
+    say("Snoozed — back at " + new Date(state.snoozeUntil).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) + ".");
+  });
+  el("edit-from-popup").addEventListener("click", function () {
+    state.snoozeUntil = 0;
+    close();
+    editor.focus();
+    editor.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  el("preview").addEventListener("click", ring);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && !overlay.hidden) { state.snoozeUntil = 0; close(); }
+  });
+
+  /* ---- chime (no audio files: synthesized, needs a click to unlock) ---- */
+  var audio = null;
+  function playChime() {
+    if (!state.chime || !audio) return;
+    if (audio.state === "suspended") audio.resume();
+    [0, 0.42, 0.84].forEach(function (offset, i) {
+      var t = audio.currentTime + offset;
+      var osc = audio.createOscillator(), gain = audio.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime([523.25, 659.25, 783.99][i], t);
+      gain.gain.setValueAtTime(0.0001, t);
+      gain.gain.exponentialRampToValueAtTime(0.16, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
+      osc.connect(gain).connect(audio.destination);
+      osc.start(t);
+      osc.stop(t + 1.2);
+    });
+  }
+  function setChime(on) {
+    state.chime = on;
+    chimeBtn.textContent = "Chime: " + (on ? "on" : "off");
+    chimeBtn.setAttribute("aria-pressed", String(on));
+    lsSet(LS_CHIME, on ? "1" : "0");
+    if (on && !audio) {
+      var Ctx = window.AudioContext || window.webkitAudioContext;
+      if (Ctx) { audio = new Ctx(); }
+    }
+    if (on && audio && audio.state === "suspended") audio.resume();
+  }
+  chimeBtn.addEventListener("click", function () { setChime(!state.chime); });
+
+  /* ---- saving ---- */
+  function save() {
+    var text = editor.value.trim() || DEFAULT_NOTE;
+    state.note = text;
+    state.time = alarmInput.value || "09:00";
+    render(text);
+    lsSet(LS_NOTE, text);
+    lsSet(LS_TIME, state.time);
+    state.firedKey = null;
+    if (state.db) {
+      state.db.doc(DOC).set({ text: text, time: state.time, updatedAt: Date.now() }).then(function () {
+        say("Saved — synced, so it follows you to any device.");
+      }, function () {
+        say("Saved on this browser. Syncing is unavailable right now.");
+      });
+    } else {
+      say("Saved on this browser.");
+    }
+  }
+  el("save").addEventListener("click", save);
+  alarmInput.addEventListener("change", save);
+  editor.addEventListener("keydown", function (e) {
+    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") save();
+  });
+
+  /* ---- boot ---- */
+  state.note = lsGet(LS_NOTE, DEFAULT_NOTE);
+  state.time = lsGet(LS_TIME, "09:00");
+  setChime(lsGet(LS_CHIME, "0") === "1");
+  editor.value = state.note;
+  alarmInput.value = state.time;
+  render(state.note);
+  tick();
+  setInterval(tick, 1000);
+
+  if (window.claude && window.claude.use) {
+    window.claude.use("db").then(function (db) {
+      if (!db) return;
+      state.db = db;
+      return db.doc(DOC).get().then(function (doc) {
+        var body = doc && doc.exists ? doc.data() : null;
+        if (body && typeof body.text === "string" && body.text) {
+          state.note = body.text;
+          state.time = typeof body.time === "string" ? body.time : state.time;
+          editor.value = state.note;
+          alarmInput.value = state.time;
+          render(state.note);
+          lsSet(LS_NOTE, state.note);
+          lsSet(LS_TIME, state.time);
+        }
+        say("Note is synced — edits follow you to any device.");
+      });
+    }).catch(function () { /* stay on local storage */ });
+  }
+})();
+</script>
+</body>
+</html>
