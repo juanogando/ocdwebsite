@@ -1,0 +1,25 @@
+---
+import ArchiveCard from './ArchiveCard.astro';
+import type { ArchiveEntry } from '../lib/archive';
+
+interface Props {
+	entries: ArchiveEntry[];
+	id?: string;
+}
+
+const { entries, id } = Astro.props;
+---
+
+<ul class="archive-grid" id={id}>
+	{entries.map((entry) => <ArchiveCard entry={entry} />)}
+</ul>
+
+<style>
+	.archive-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+		gap: 1.5rem;
+		margin: 0;
+		padding: 0;
+	}
+</style>

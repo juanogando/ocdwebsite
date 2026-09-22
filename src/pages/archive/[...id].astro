@@ -1,0 +1,194 @@
+---
+import { render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import { SITE_TITLE } from '../../consts';
+import { type ArchiveEntry, getArchive, toRecord } from '../../lib/archive';
+
+export async function getStaticPaths() {
+	const { entries } = await getArchive();
+	return entries.map((entry) => ({ params: { id: entry.item.id }, props: { entry } }));
+}
+
+interface Props {
+	entry: ArchiveEntry;
+}
+
+const { entry } = Astro.props;
+const { item, brand, collection } = entry;
+const d = item.data;
+const { Content } = await render(item);
+const isVideo = d.media && /\.(mp4|webm|mov)$/i.test(d.media);
+const record = toRecord(entry);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`${d.title} | ${brand.data.name} | ${SITE_TITLE}`}
+			description={d.description ?? d.title}
+			image={d.thumbnail ?? d.media}
+		/>
+		<style>
+			main {
+				width: 1000px;
+			}
+			.crumbs {
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+			}
+			.layout {
+				display: grid;
+				grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+				gap: 2rem;
+				align-items: start;
+			}
+			.media img,
+			.media video {
+				width: 100%;
+				border-radius: 8px;
+			}
+			dl {
+				display: grid;
+				grid-template-columns: max-content 1fr;
+				gap: 0.3em 1em;
+				font-size: 0.8em;
+				margin: 0;
+			}
+			dt {
+				color: rgb(var(--gray));
+			}
+			dd {
+				margin: 0;
+			}
+			.tags a {
+				margin-right: 0.5em;
+			}
+			details {
+				margin-top: 2rem;
+				font-size: 0.75em;
+			}
+			@media (max-width: 720px) {
+				.layout {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<p class="crumbs">
+				<a href="/archive/">Archive</a> /
+				<a href={`/archive/brands/${brand.id}/`}>{brand.data.name}</a>
+				{collection && (
+					<>
+						{' / '}
+						<a href={`/archive/collections/${collection.id}/`}>{collection.data.name}</a>
+					</>
+				)}
+			</p>
+			<h1>{d.title}</h1>
+			{d.description && <p>{d.description}</p>}
+
+			<div class="layout">
+				<div class="media">
+					{isVideo ? (
+						<video src={d.media} poster={d.thumbnail} controls />
+					) : (
+						(d.media ?? d.thumbnail) && <img src={d.media ?? d.thumbnail} alt={d.title} />
+					)}
+					<Content />
+				</div>
+
+				<dl>
+					<dt>Brand</dt>
+					<dd><a href={`/archive/brands/${brand.id}/`}>{brand.data.name}</a></dd>
+					{collection && (
+						<>
+							<dt>Collection</dt>
+							<dd><a href={`/archive/collections/${collection.id}/`}>{collection.data.name}</a></dd>
+						</>
+					)}
+					{collection?.data.season && (
+						<>
+							<dt>Season</dt>
+							<dd>{collection.data.season} {collection.data.year}</dd>
+						</>
+					)}
+					<dt>Type</dt>
+					<dd><a href={`/archive/?type=${d.type}`}>{d.type}</a></dd>
+					<dt>Status</dt>
+					<dd>{d.status}</dd>
+					<dt>Created</dt>
+					<dd><FormattedDate date={d.createdDate} /></dd>
+					{d.archivedDate && (
+						<>
+							<dt>Archived</dt>
+							<dd><FormattedDate date={d.archivedDate} /></dd>
+						</>
+					)}
+					{d.creator && (
+						<>
+							<dt>Creator</dt>
+							<dd>{d.creator}</dd>
+						</>
+					)}
+					{d.credits.map((c) => (
+						<>
+							<dt>{c.role}</dt>
+							<dd>{c.name}</dd>
+						</>
+					))}
+					{d.tools.length > 0 && (
+						<>
+							<dt>Tools</dt>
+							<dd>{d.tools.join(', ')}</dd>
+						</>
+					)}
+					{d.tags.length > 0 && (
+						<>
+							<dt>Tags</dt>
+							<dd class="tags">
+								{d.tags.map((t) => <a href={`/archive/?tag=${encodeURIComponent(t)}`}>#{t}</a>)}
+							</dd>
+						</>
+					)}
+					{d.links.length > 0 && (
+						<>
+							<dt>Links</dt>
+							<dd>
+								{d.links.map((l) => (
+									<div><a href={l.url} target="_blank" rel="noopener">{l.label}</a></div>
+								))}
+							</dd>
+						</>
+					)}
+					{d.rights && (
+						<>
+							<dt>Rights</dt>
+							<dd>{d.rights}</dd>
+						</>
+					)}
+					{d.usage && (
+						<>
+							<dt>Usage</dt>
+							<dd>{d.usage}</dd>
+						</>
+					)}
+					<dt>Archive ID</dt>
+					<dd><code>{item.id}</code></dd>
+				</dl>
+			</div>
+
+			<details>
+				<summary>Raw metadata</summary>
+				<pre>{JSON.stringify(record, null, 2)}</pre>
+			</details>
+		</main>
+		<Footer />
+	</body>
+</html>

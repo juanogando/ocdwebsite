@@ -1,0 +1,111 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import type { ArchiveEntry } from '../lib/archive';
+
+interface Props {
+	entry: ArchiveEntry;
+}
+
+const { item, brand, collection } = Astro.props.entry;
+const d = item.data;
+const thumb = d.thumbnail ?? d.media;
+const searchText = [
+	d.title,
+	d.description,
+	brand.data.name,
+	collection?.data.name,
+	d.type,
+	d.status,
+	d.creator,
+	...d.tags,
+	...d.tools,
+	...d.credits.map((c) => c.name),
+	item.body,
+]
+	.filter(Boolean)
+	.join(' ')
+	.toLowerCase();
+---
+
+<li
+	class="archive-card"
+	data-search={searchText}
+	data-brand={brand.id}
+	data-collection={collection?.id ?? ''}
+	data-type={d.type}
+	data-status={d.status}
+	data-year={String(d.createdDate.getUTCFullYear())}
+	data-tags={d.tags.join('|')}
+>
+	<a href={`/archive/${item.id}/`}>
+		{thumb ? <img src={thumb} alt="" loading="lazy" /> : <div class="no-thumb">{d.type}</div>}
+		<h4>{d.title}</h4>
+	</a>
+	<p class="meta">
+		<a href={`/archive/brands/${brand.id}/`}>{brand.data.name}</a>
+		{collection && (
+			<>
+				{' / '}
+				<a href={`/archive/collections/${collection.id}/`}>{collection.data.name}</a>
+			</>
+		)}
+	</p>
+	<p class="meta">
+		<span class="pill">{d.type}</span>
+		<span class={`pill status-${d.status}`}>{d.status}</span>
+		<FormattedDate date={d.createdDate} />
+	</p>
+</li>
+
+<style>
+	.archive-card {
+		list-style: none;
+	}
+	.archive-card img,
+	.no-thumb {
+		width: 100%;
+		aspect-ratio: 4 / 5;
+		object-fit: cover;
+		border-radius: 8px;
+		display: block;
+	}
+	.no-thumb {
+		display: grid;
+		place-items: center;
+		background: rgb(var(--gray-light));
+		color: rgb(var(--gray));
+		text-transform: uppercase;
+		font-size: 0.8em;
+	}
+	.archive-card > a {
+		text-decoration: none;
+		color: rgb(var(--black));
+	}
+	.archive-card > a:hover h4 {
+		color: var(--accent);
+	}
+	h4 {
+		margin: 0.5em 0 0.2em;
+		font-size: 1em;
+	}
+	.meta {
+		margin: 0;
+		font-size: 0.75em;
+		color: rgb(var(--gray));
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4em;
+		align-items: center;
+	}
+	.pill {
+		border: 1px solid rgb(var(--gray-light));
+		border-radius: 999px;
+		padding: 0 0.6em;
+	}
+	.status-draft {
+		border-color: #d9a400;
+	}
+	.status-published {
+		border-color: #2a9d55;
+	}
+</style>

@@ -1,0 +1,208 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import ArchiveGrid from '../../components/ArchiveGrid.astro';
+import { SITE_TITLE } from '../../consts';
+import { ITEM_STATUSES, ITEM_TYPES } from '../../content.config';
+import { getArchive, uniqueSorted } from '../../lib/archive';
+
+const { entries, brands, collections } = await getArchive();
+const tags = uniqueSorted(entries.flatMap((e) => e.item.data.tags));
+const years = uniqueSorted(
+	entries.map((e) => String(e.item.data.createdDate.getUTCFullYear())),
+).reverse();
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Archive | ${SITE_TITLE}`} description="Searchable archive of work by brand and collection." />
+		<style>
+			main {
+				width: 1100px;
+			}
+			.filters {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+				gap: 0.75rem;
+				margin-bottom: 1rem;
+			}
+			.filters label {
+				display: flex;
+				flex-direction: column;
+				font-size: 0.7em;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: rgb(var(--gray));
+			}
+			.filters .search {
+				grid-column: 1 / -1;
+			}
+			.filters input,
+			.filters select {
+				font: inherit;
+				font-size: 1.3em;
+				text-transform: none;
+				letter-spacing: normal;
+				padding: 0.35em 0.5em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 6px;
+				background: white;
+				color: rgb(var(--black));
+			}
+			.summary {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 0.8em;
+				color: rgb(var(--gray));
+				margin-bottom: 1.5rem;
+			}
+			.summary button {
+				font: inherit;
+				background: none;
+				border: none;
+				color: var(--accent);
+				cursor: pointer;
+			}
+			.browse {
+				font-size: 0.8em;
+				margin-bottom: 2rem;
+			}
+			.browse a {
+				margin-right: 0.8em;
+			}
+			.empty {
+				display: none;
+				color: rgb(var(--gray));
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Archive</h1>
+			<p class="browse">
+				<strong>Brands:</strong>
+				{brands.map((b) => <a href={`/archive/brands/${b.id}/`}>{b.data.name}</a>)}
+				<br />
+				<strong>Collections:</strong>
+				{collections.map((c) => <a href={`/archive/collections/${c.id}/`}>{c.data.name}</a>)}
+				<br />
+				<a href="/archive/index.json">Download metadata (JSON)</a>
+			</p>
+
+			<form class="filters" id="archive-filters" onsubmit="return false">
+				<label class="search">
+					Search
+					<input type="search" name="q" placeholder="Title, tag, creator, tool, notes…" />
+				</label>
+				<label>
+					Brand
+					<select name="brand">
+						<option value="">All</option>
+						{brands.map((b) => <option value={b.id}>{b.data.name}</option>)}
+					</select>
+				</label>
+				<label>
+					Collection
+					<select name="collection">
+						<option value="">All</option>
+						{collections.map((c) => <option value={c.id}>{c.data.name}</option>)}
+					</select>
+				</label>
+				<label>
+					Type
+					<select name="type">
+						<option value="">All</option>
+						{ITEM_TYPES.map((t) => <option value={t}>{t}</option>)}
+					</select>
+				</label>
+				<label>
+					Tag
+					<select name="tag">
+						<option value="">All</option>
+						{tags.map((t) => <option value={t}>{t}</option>)}
+					</select>
+				</label>
+				<label>
+					Year
+					<select name="year">
+						<option value="">All</option>
+						{years.map((y) => <option value={y}>{y}</option>)}
+					</select>
+				</label>
+				<label>
+					Status
+					<select name="status">
+						<option value="">All</option>
+						{ITEM_STATUSES.map((s) => <option value={s}>{s}</option>)}
+					</select>
+				</label>
+			</form>
+
+			<div class="summary">
+				<span id="archive-count">{entries.length} items</span>
+				<button type="button" id="archive-reset">Clear filters</button>
+			</div>
+
+			<ArchiveGrid entries={entries} id="archive-grid" />
+			<p class="empty" id="archive-empty">No items match these filters.</p>
+		</main>
+		<Footer />
+
+		<script>
+			const form = document.getElementById('archive-filters') as HTMLFormElement;
+			const cards = [...document.querySelectorAll<HTMLElement>('#archive-grid .archive-card')];
+			const count = document.getElementById('archive-count')!;
+			const empty = document.getElementById('archive-empty')!;
+			const fields = ['q', 'brand', 'collection', 'type', 'tag', 'year', 'status'];
+
+			function readState() {
+				const data = new FormData(form);
+				return Object.fromEntries(fields.map((f) => [f, String(data.get(f) ?? '')]));
+			}
+
+			function apply() {
+				const s = readState();
+				const terms = s.q.toLowerCase().split(/\s+/).filter(Boolean);
+				let shown = 0;
+				for (const card of cards) {
+					const d = card.dataset;
+					const match =
+						terms.every((t) => d.search!.includes(t)) &&
+						(!s.brand || d.brand === s.brand) &&
+						(!s.collection || d.collection === s.collection) &&
+						(!s.type || d.type === s.type) &&
+						(!s.status || d.status === s.status) &&
+						(!s.year || d.year === s.year) &&
+						(!s.tag || d.tags!.split('|').includes(s.tag));
+					card.hidden = !match;
+					if (match) shown++;
+				}
+				count.textContent = `${shown} of ${cards.length} items`;
+				empty.style.display = shown ? 'none' : 'block';
+
+				// Keep filters in the URL so a filtered view can be linked.
+				const params = new URLSearchParams();
+				for (const f of fields) if (s[f]) params.set(f, s[f]);
+				const qs = params.toString();
+				history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+			}
+
+			const initial = new URLSearchParams(location.search);
+			for (const f of fields) {
+				const el = form.elements.namedItem(f) as HTMLInputElement | HTMLSelectElement | null;
+				if (el && initial.has(f)) el.value = initial.get(f)!;
+			}
+
+			form.addEventListener('input', apply);
+			document.getElementById('archive-reset')!.addEventListener('click', () => {
+				form.reset();
+				apply();
+			});
+			apply();
+		</script>
+	</body>
+</html>

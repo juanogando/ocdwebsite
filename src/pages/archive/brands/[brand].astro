@@ -1,0 +1,68 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import ArchiveGrid from '../../../components/ArchiveGrid.astro';
+import { SITE_TITLE } from '../../../consts';
+import { type Brand, getArchive } from '../../../lib/archive';
+
+export async function getStaticPaths() {
+	const { brands } = await getArchive();
+	return brands.map((brand) => ({ params: { brand: brand.id }, props: { brand } }));
+}
+
+interface Props {
+	brand: Brand;
+}
+
+const { brand } = Astro.props;
+const { entries, collections } = await getArchive();
+const brandEntries = entries.filter((e) => e.brand.id === brand.id);
+const brandCollections = collections.filter((c) => c.data.brand.id === brand.id);
+const loose = brandEntries.filter((e) => !e.collection);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`${brand.data.name} archive | ${SITE_TITLE}`} description={brand.data.description ?? brand.data.name} />
+		<style>
+			main {
+				width: 1100px;
+			}
+			section {
+				margin-bottom: 3rem;
+			}
+			.sub {
+				color: rgb(var(--gray));
+				font-size: 0.8em;
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<p class="sub"><a href="/archive/">Archive</a> / Brands</p>
+			<h1>{brand.data.name}</h1>
+			{brand.data.description && <p>{brand.data.description}</p>}
+			{brand.data.website && <p><a href={brand.data.website} target="_blank" rel="noopener">{brand.data.website}</a></p>}
+			<p class="sub">{brandEntries.length} items in {brandCollections.length} collections</p>
+
+			{brandCollections.map((c) => (
+				<section>
+					<h2><a href={`/archive/collections/${c.id}/`}>{c.data.name}</a></h2>
+					<p class="sub">{[c.data.season, c.data.year].filter(Boolean).join(' ')}</p>
+					<ArchiveGrid entries={brandEntries.filter((e) => e.collection?.id === c.id)} />
+				</section>
+			))}
+
+			{loose.length > 0 && (
+				<section>
+					<h2>Not in a collection</h2>
+					<ArchiveGrid entries={loose} />
+				</section>
+			)}
+		</main>
+		<Footer />
+	</body>
+</html>

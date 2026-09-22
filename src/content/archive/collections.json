@@ -1,0 +1,25 @@
+[
+  {
+    "id": "ocd-identity",
+    "name": "Studio Identity",
+    "brand": "ocd",
+    "year": 2026,
+    "description": "Logos, type and brand system for OCD Studio."
+  },
+  {
+    "id": "swss-ss26",
+    "name": "SS26",
+    "brand": "swss",
+    "season": "Spring/Summer",
+    "year": 2026,
+    "description": "Spring/Summer 2026 swim collection."
+  },
+  {
+    "id": "juanimali-fw26",
+    "name": "FW26 Campaign",
+    "brand": "juanimali",
+    "season": "Fall/Winter",
+    "year": 2026,
+    "description": "Fall/Winter 2026 campaign imagery."
+  }
+]

@@ -60,3 +60,49 @@ Check out [our documentation](https://docs.astro.build) or jump into our [Discor
 ## Credit
 
 This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+
+## 🗄️ Archive
+
+A metadata-driven archive lives at `/archive`, organized as **brand → collection → item**.
+
+| What | Where |
+| :--- | :---- |
+| Brands | `src/content/archive/brands.json` |
+| Collections (season, campaign, drop) | `src/content/archive/collections.json` (each has a `brand`) |
+| Items (one Markdown file per asset) | `src/content/archive/items/<brand>/<name>.md` |
+| Schema (all metadata fields) | `src/content.config.ts` |
+
+To add an item, create a Markdown file whose frontmatter holds the metadata; the body holds notes:
+
+```md
+---
+title: SS26 lookbook
+type: lookbook            # image | video | lookbook | campaign | sketch | techpack | document | link
+status: published         # draft | final | published | retired
+brand: swss               # id from brands.json
+collection: swss-ss26     # id from collections.json (optional)
+tags: [swim, ss26]
+media: /archive/swss/ss26-lookbook.jpg   # file in public/ or a full URL
+links:
+  - label: Instagram post
+    url: https://www.instagram.com/p/...
+createdDate: 2026-04-18
+creator: Juan Ogando
+credits:
+  - role: Photography
+    name: ...
+tools: [ComfyUI, Magnific]
+rights: All rights reserved
+usage: Web and social
+---
+
+Notes about the piece.
+```
+
+The build rejects an unknown brand/collection id or a missing required field. Pages generated:
+
+- `/archive` — search and filter by brand, collection, type, tag, year and status (filters are kept in the URL)
+- `/archive/brands/<brand>` — a brand's work grouped by collection
+- `/archive/collections/<collection>` — one collection
+- `/archive/<brand>/<name>` — an item with its full metadata
+- `/archive/index.json` — full metadata export
