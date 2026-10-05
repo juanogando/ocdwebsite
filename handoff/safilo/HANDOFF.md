@@ -26,9 +26,9 @@ Slides use 1000px JPG copies; videos are the originals.
 cover, flow overview, 1 input, 2 views (5 at 1:1), camera heights (2 at 1:1), 3 360 spin, 4 still models (4 at 4:5), 5 video x2 pages (4 clips at 4:5), cost per frame table, bulk, capabilities.
 
 ## Pricing (from OCD_RAPID_STUDIO_OFFERINGS_CATALOG_BOOK1_PUBLIC_LETTER_2026-09-18.pdf; 1 credit = $0.10)
-Sketch Render/view 5 · 360° EXACT 50 cr/s at 720p, 90 cr/s at 1080p (5 s 720p = 250, 10 s 1080p = 900) · Build the Look 3 (HD 6) · Model Swap 10-11 · Video 720p 5 s 12, 1080p 10 s 45 · Enhance 2K/4K/5K 3/8/13 · Cast a model 8.
+Sketch Render/view 5 · 360° EXACT 50 cr/s at 720p, 90 cr/s at 1080p (5 s 720p = 250, 10 s 1080p = 900) · Build the Look 3 (HD 6) · Model Swap 10-11 · Video 720p 5 s 15, 1080p 10 s 55 (UPDATED to live-app prices by Juan 2026-10-05; the 2026-09-18 catalog said 12/45) · Enhance 2K/4K/5K 3/8/13 · Cast a model 8.
 Custom: workflow app $7,500-15,000; business app $25,000-90,000; AI studio app $90,000-250,000+; retainers $3,500 / $6,500 / $12,000 a month; branded workspace and install-in-your-cloud by quote.
-My assumption (NOT a quote): example bundle per frame = 6 views 30 + 5 s 720p spin 250 + 3 looks 9 + one 10 s 1080p video 45 = 334 cr = $33.40. "100 frames = $3,340" is arithmetic on that.
+My assumption (NOT a quote): example bundle per frame = 6 views 30 + 5 s 720p spin 250 + 3 looks 9 + one 10 s 1080p video 55 = 344 cr = $34.40. "100 frames = $3,440" is arithmetic on that.
 
 ## Decisions made
 - Hero product shot slide REMOVED (Juan: "we won't have it, use what we have, those are final").
