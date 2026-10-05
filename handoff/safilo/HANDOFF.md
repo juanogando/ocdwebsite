@@ -1,3 +1,5 @@
+> SUPERSEDED 2026-10-05: replaced by the 13-page HTML deck at C:\Users\ogand\OneDrive\Documents\OCD_WORK\SAFILO\handoff\deck_multimedia\index.html (see HANDOFF_2026-10-05_SAFILO_DECK_AND_FLASH_FINDING.md). This file, the PDF and slides/ are kept, not deleted. Prices here (344 cr / $34.40) differ from the newer deck (334 cr / $33.40): Juan to confirm.
+
 # HANDOFF: Safilo AI Bulk Studio deck (OCD Rapid Studio)
 
 Goal: a 16:9 multimedia catalog for Ali (Safilo) showing: one 3/4 shot -> all-angle views -> OCD 360° EXACT spin -> models wearing the product -> model+product video. Every slide shows the render cost. Last slide = OCD Rapid Studio capabilities + custom client services.
