@@ -1,4 +1,4 @@
-> SUPERSEDED 2026-10-05: replaced by the 13-page HTML deck at C:\Users\ogand\OneDrive\Documents\OCD_WORK\SAFILO\handoff\deck_multimedia\index.html (see HANDOFF_2026-10-05_SAFILO_DECK_AND_FLASH_FINDING.md). This file, the PDF and slides/ are kept, not deleted. Prices here (344 cr / $34.40) differ from the newer deck (334 cr / $33.40): Juan to confirm.
+> PRICES UPDATED 2026-10-09: OCD 360° EXACT catalog turn 10 s 1080p (900 cr) in the bundle; video 15/55; per frame 994 cr = $99.40; 100 frames $9,940. Social turn 5 s 720p 250 cr ($25) shown as add-on. The 13-page HTML deck on the PC (334/84) still carries the OLD numbers: Juan to decide if it gets the same fix. NEVER replace the Safilo PRESENTS link with a new one: use Replace on the same token.
 
 # HANDOFF: Safilo AI Bulk Studio deck (OCD Rapid Studio)
 
@@ -30,7 +30,7 @@ cover, flow overview, 1 input, 2 views (5 at 1:1), camera heights (2 at 1:1), 3 
 ## Pricing (from OCD_RAPID_STUDIO_OFFERINGS_CATALOG_BOOK1_PUBLIC_LETTER_2026-09-18.pdf; 1 credit = $0.10)
 Sketch Render/view 5 · 360° EXACT 50 cr/s at 720p, 90 cr/s at 1080p (5 s 720p = 250, 10 s 1080p = 900) · Build the Look 3 (HD 6) · Model Swap 10-11 · Video 720p 5 s 15, 1080p 10 s 55 (UPDATED to live-app prices by Juan 2026-10-05; the 2026-09-18 catalog said 12/45) · Enhance 2K/4K/5K 3/8/13 · Cast a model 8.
 Custom: workflow app $7,500-15,000; business app $25,000-90,000; AI studio app $90,000-250,000+; retainers $3,500 / $6,500 / $12,000 a month; branded workspace and install-in-your-cloud by quote.
-My assumption (NOT a quote): example bundle per frame = 6 views 30 + 5 s 720p spin 250 + 3 looks 9 + one 10 s 1080p video 55 = 344 cr = $34.40. "100 frames = $3,440" is arithmetic on that.
+My assumption (NOT a quote): example bundle per frame = 6 views 30 + 5 s 720p spin 250 + 3 looks 9 + one 10 s 1080p video 55, 10 s 1080p spin 900 instead of 250 = 994 cr = $99.40. "100 frames = $9,940" is arithmetic on that.
 
 ## Decisions made
 - Hero product shot slide REMOVED (Juan: "we won't have it, use what we have, those are final").
